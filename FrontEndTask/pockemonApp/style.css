@@ -1,0 +1,49 @@
+/* Add this CSS to your HTML file or link to an external stylesheet */
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f5f5f5;
+}
+
+#pokemon-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pokemon-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    width: 200px;
+    height: 300px; /* Fix the height to 300px */
+    overflow-y: auto; /* Add a scrollbar for overflow content */
+}
+
+h2 {
+    font-size: 18px;
+    margin: 0;
+    text-transform: capitalize;
+}
+
+p {
+    margin: 5px 0;
+}
+
+#prev-button, #next-button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#prev-button:hover, #next-button:hover {
+    background-color: #0056b3;
+}
