@@ -20,10 +20,10 @@ async function fetchPokemon(url) {
 }
 
 async function fetchAndDisplayPokemon(offset) {
-    debugger
+    console.log(offset);
     const response = await fetchPokemon(`${apiUrl}?offset=${offset}&limit=${limit}`);
     const pokemonData = response.results;
-
+     console.log(pokemonData)
     pokemonList.innerHTML = ''; // Clear previous list
 
     for (const pokemon of pokemonData) {
@@ -54,7 +54,7 @@ function displayPokemonInfo(pokemon) {
 
     const weightElement = document.createElement('p');
     weightElement.textContent = `Weight: ${pokemon.weight} kg`;
-
+    console.log(idElement)
     pokemonCard.appendChild(idElement);
     pokemonCard.appendChild(nameElement);
     pokemonCard.appendChild(imageElement);
@@ -76,8 +76,8 @@ prevButton.addEventListener('click', () => {
 
 nextButton.addEventListener('click', () => {
     offset += limit;
+    console.log(offset)
     fetchAndDisplayPokemon(offset);
 });
 
-// Initial load
 fetchAndDisplayPokemon(offset);
