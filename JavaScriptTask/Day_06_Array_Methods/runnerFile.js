@@ -14,13 +14,18 @@ printHellowWord();
 const data = await getData(BaseURL);
 
 // Get all the countries from Asia continent /region using Filter function
-// console.log(data.filter(element => { return element.continents == 'Asia'}))
-
+// const filterData= data.filter(element => { return element.continents == 'Asia'})
+// filterData.forEach(data=>{
+//     console.log(data["name"],data["continents"]);
+// })
 // Get all the countries with a population of less than 2 lakhs using Filter function
-// console.log(data.filter(element => { return element.population < 200000 }))
+// const filterData =data.filter(element => { return element.population < 200000 });
+// filterData.forEach(data=>{
+//     console.log(data["name"],data["population"]);
+// })
 
 // Print the following details name, capital, flag using forEach function
-// data.forEach(element=>{console.log(element.name.official,element.capital,element.flag)})
+//  data.forEach(element=>{console.log(element.name.official,element.capital,element.flag)})
 
 // Print the total population of countries using reduce function
 // const populationArr = [];
@@ -31,15 +36,15 @@ const data = await getData(BaseURL);
 // const total = populationArr.reduce((acc, crr) => {
 //   return acc + crr;
 // });
-
 // console.log(total);
 
 // Print the country which uses US Dollars as currency.
-// const ct =  data.filter((element) => {
-//   if (element.currencies) {
-//     return Object?.entries(element?.currencies)[0][0] == 'USD';
-//   }
+// const filterData = data.filter((element) => {
+//     if (element.currencies) {
+//         return Object?.entries(element?.currencies)[0][0] == 'USD';
+//     }
 // });
 
-
-// console.log(ct)
+// filterData.forEach(data=>{
+//     console.log(data["name"],data["currencies"]);
+// })
