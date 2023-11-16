@@ -6,10 +6,12 @@ function UserList() {
     const { data } = useContext(context);
 
     return (
-        <div>
+
+        <div className='row'>
             {data.map(user => (
                 <User key={user.id} user={user} />
             ))}
+
         </div>
     );
 }

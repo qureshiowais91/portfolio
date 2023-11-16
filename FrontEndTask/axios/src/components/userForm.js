@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 
 function UserForm() {
@@ -33,16 +34,19 @@ function UserForm() {
     e.preventDefault();
 
     if (formData.id) {
-      // Handle update logic for existing entry
-      console.log('Updating user with ID:', formData.id);
-      // Perform update API call or other logic
-    } else {
-      // Handle new entry logic for new user
+      console.log('Updating user with ID:', formData);
+      axios.put(`https://jsonplaceholder.typicode.com/users/${formData.id}`, formData)
+        .then(response => {
+          console.log('User updated successfully:', response.data);
+        })
+        .catch(error => {
+          console.error('Error updating user:', error);
+        }); 
+    }
+     else {
       console.log('Creating new user entry');
-      // Perform create API call or other logic
     }
 
-    // Reset the form after submission
     setFormData({
       id: '',
       name: '',
@@ -84,19 +88,19 @@ function UserForm() {
       </div>
       <div className="form-group">
         <label>Street:</label>
-        <input type="text" className="form-control" name="address.street" value={formData.address.street} onChange={handleChange} />
+        <input type="text" className="form-control" name="address.street" value={formData.street} onChange={handleChange} />
       </div>
       <div className="form-group">
         <label>Suite:</label>
-        <input type="text" className="form-control" name="address.suite" value={formData.address.suite} onChange={handleChange} />
+        <input type="text" className="form-control" name="address.suite" value={formData.suite} onChange={handleChange} />
       </div>
       <div className="form-group">
         <label>City:</label>
-        <input type="text" className="form-control" name="address.city" value={formData.address.city} onChange={handleChange} />
+        <input type="text" className="form-control" name="address.city" value={formData.city} onChange={handleChange} />
       </div>
       <div className="form-group">
         <label>Zipcode:</label>
-        <input type="text" className="form-control" name="address.zipcode" value={formData.address.zipcode} onChange={handleChange} />
+        <input type="text" className="form-control" name="address.zipcode" value={formData.zipcode} onChange={handleChange} />
       </div>
       <div className="form-group">
         <label>Phone:</label>
@@ -108,15 +112,15 @@ function UserForm() {
       </div>
       <div className="form-group">
         <label>Company Name:</label>
-        <input type="text" className="form-control" name="company.name" value={formData.company.name} onChange={handleChange} />
+        <input type="text" className="form-control" name="company.name" value={formData.name} onChange={handleChange} />
       </div>
       <div className="form-group">
         <label>Catch Phrase:</label>
-        <input type="text" className="form-control" name="company.catchPhrase" value={formData.company.catchPhrase} onChange={handleChange} />
+        <input type="text" className="form-control" name="company.catchPhrase" value={formData.catchPhrase} onChange={handleChange} />
       </div>
       <div className="form-group">
         <label>BS:</label>
-        <input type="text" className="form-control" name="company.bs" value={formData.company.bs} onChange={handleChange} />
+        <input type="text" className="form-control" name="company.bs" value={formData.bs} onChange={handleChange} />
       </div>
       <button type="submit" className="btn btn-primary">Submit</button>
     </form>
