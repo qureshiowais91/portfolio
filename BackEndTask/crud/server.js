@@ -48,7 +48,7 @@ app.post('/users', async (req, res) => {
 
 app.get('/users', async (req, res) => {
   try {
-    const users = await User.find({ id: req.params.id });
+    const users = await User.find();
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
@@ -56,9 +56,11 @@ app.get('/users', async (req, res) => {
 });
 
 
-app.get('/user', async (req, res) => {
+app.post('/user', async (req, res) => {
   try {
-    const users = await User.find({ id: req.params.id });
+
+    const users = await User.find({ id: req.query.id });
+
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
@@ -69,7 +71,7 @@ app.get('/user', async (req, res) => {
 app.put('/users', async (req, res) => {
   try {
     const updatedUser = await User.findOneAndUpdate(
-      { id: req.params.id },
+      { id: req.query.id },
       req.body,
       { new: true }
     );
@@ -81,7 +83,7 @@ app.put('/users', async (req, res) => {
 
 app.put('/usersdelete', async (req, res) => {
   try {
-    await User.deleteOne({ id: req.params.id });
+    await User.deleteOne({ id: req.query.id });
     res.status(204).end();
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
