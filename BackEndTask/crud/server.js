@@ -9,7 +9,6 @@ const port = 3000;
 console.log(process.env.MONGODB_URI)
 mongoose.connect(process.env.MONGODB_URI);
 const userSchema = new mongoose.Schema({
-  id: Number,
   name: String,
   username: String,
   email: String,
@@ -59,8 +58,7 @@ app.get('/users', async (req, res) => {
 app.post('/user', async (req, res) => {
   try {
 
-    const users = await User.find({ id: req.query.id });
-
+    const users = await User.find({ _id: req.query._id });
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
@@ -68,10 +66,10 @@ app.post('/user', async (req, res) => {
 });
 
 
-app.put('/users', async (req, res) => {
+app.post('/usersUpdate', async (req, res) => {
   try {
     const updatedUser = await User.findOneAndUpdate(
-      { id: req.query.id },
+      { _id: req.query._id },
       req.body,
       { new: true }
     );
@@ -83,7 +81,7 @@ app.put('/users', async (req, res) => {
 
 app.put('/usersdelete', async (req, res) => {
   try {
-    await User.deleteOne({ id: req.query.id });
+    await User.deleteOne({ _id: req.query._id });
     res.status(204).end();
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
