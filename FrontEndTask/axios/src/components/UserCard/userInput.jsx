@@ -1,81 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useUserData } from '../../context/DataProvider';
 
-export const UserInput = ({ createUser }) => {
-
-  const [userData, setUserData] = useState('');
-
-  const [address, setAddress] = useState({
-    street: '',
-    suite: '',
-    city: '',
-    zipcode: '',
-  });
-
-  const [geo, setGeo] = useState({
-    lat: '',
-    lng: '',
-  });
-
-  const [user, setUser] = useState({
-    username: '',
-    email: '',
-    phone: '',
-    website: '',
-  });
-
-  const [company, setCompany] = useState({
-    name: '',
-    catchPhrase: '',
-    bs: '',
-  });
-
-  const handleAddressChange = (e) => {
-    const { id, value } = e.target;
-    console.log(value);
-    setAddress((prevAddress) => ({
-      ...prevAddress,
-      [id]: value,
-    }));
-  };
-
-  const handleUserChange = (e) => {
-    const { id, value } = e.target;
-    setUser((prevUser) => ({
-      ...prevUser,
-      [id]: value,
-    }));
-  };
-
-  const handleCompanyChange = (e) => {
-    const { id, value } = e.target;
-    console.log(value);
-
-    setCompany((prevCompany) => ({
-      ...prevCompany,
-      [id]: value,
-    }));
-  };
-
-  const handleGeoChange = (e) => {
-    const { id, value } = e.target;
-    console.log(value);
-    setGeo((prevGeo) => ({
-      ...prevGeo,
-      [id]: value,
-    }));
-  };
-
-  const handleAddUser = () => {
-    setUserData(() => ({
-      ...user,
-      address: { ...address, geo },
-      company: { ...company },
-    }));
-  };
-
-  useEffect(() => {
-    createUser(userData);
-  }, [userData]);
+export const UserInput = () => {
+  const {
+    handleAddressChange,
+    handleUserChange,
+    handleCompanyChange,
+    handleGeoChange,
+    handleAddUser,
+  } = useUserData();
 
   return (
     <div className='max-w-md mx-auto'>

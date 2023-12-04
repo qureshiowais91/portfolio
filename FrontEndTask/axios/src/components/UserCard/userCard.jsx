@@ -14,6 +14,7 @@ const UserCard = ({ user }) => {
 
   return (
     <div className='bg-white border rounded p-4 shadow-md mb-4'>
+      <strong>_id:{user._id}</strong>
       <h2 className='text-xl font-bold mb-2'>{name}</h2>
       <p>
         <strong>Username:</strong> {username}
