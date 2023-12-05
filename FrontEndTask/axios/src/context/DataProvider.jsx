@@ -7,6 +7,8 @@ const DataContext = createContext();
 export const DataProvider = ({ children }) => {
   const [data, setData] = useState();
 
+  const [updateId, setUpdateId] = useState();
+
   const [geo, setGeo] = useState({
     lat: '',
     lng: '',
@@ -30,6 +32,14 @@ export const DataProvider = ({ children }) => {
     phone: '',
     website: '',
   });
+
+  const handleUpdateIdChange = (e) => {
+    const { id, value } = e.target;
+    setUpdateId((prevUpdateId) => ({
+      ...prevUpdateId,
+      [id]: value,
+    }));
+  };
 
   const handleAddressChange = (e) => {
     const { id, value } = e.target;
@@ -65,18 +75,19 @@ export const DataProvider = ({ children }) => {
       ...user,
       address: { ...address, geo },
       company: { ...company },
+      id: updateId?.id,
     }));
-
-    console.log(user);
-    console.log(address);
-  }, [geo, address, company]);
-  
+  }, [geo, address, company,updateId]);
 
   const handleAddUser = () => {
-    createUser(user)
+    createUser(user);
   };
 
- 
+  const handleUpdateUser = () => {
+    console.log(user)
+    updateUser(user);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -102,16 +113,17 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  // const updateUser = () => {
-  //   const id = userData?.id?.id;
-  //   console.log(id);
-  //   if (userData) {
-  //     axios.post(
-  //       `https://api-rest-1-mqvk.onrender.com/usersUpdate?_id=${id}`,
-  //       userData
-  //     );
-  //   }
-  // };
+  const updateUser = (userData) => {
+    const {id} = userData;
+    console.log(userData);
+    console.log("id",id)
+    if (userData) {
+      axios.post(
+        `https://api-rest-1-mqvk.onrender.com/usersUpdate?_id=${id}`,
+        userData
+      );
+    }
+  };
 
   return (
     <DataContext.Provider
@@ -121,6 +133,8 @@ export const DataProvider = ({ children }) => {
         handleCompanyChange,
         handleGeoChange,
         handleAddUser,
+        handleUpdateUser,
+        handleUpdateIdChange,
         data,
       }}
     >

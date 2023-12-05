@@ -1,111 +1,24 @@
-import { useState } from 'react';
+import { useUserData } from '../../context/DataProvider';
 
-export const UserUpdate = ({ updateUser }) => {
-  const [userData, setUserData] = useState('');
-  const [_id, setId] = useState();
-  const [address, setAddress] = useState({
-    street: '',
-    suite: '',
-    city: '',
-    zipcode: '',
-  });
-
-  const [geo, setGeo] = useState({
-    lat: '',
-    lng: '',
-  });
-
-  const [user, setUser] = useState({
-    username: '',
-    email: '',
-    phone: '',
-    website: '',
-  });
-
-  const [company, setCompany] = useState({
-    name: '',
-    catchPhrase: '',
-    bs: '',
-  });
-
-  const handleIdChange = (e) => {
-    const { id, value } = e.target;
-    setId((prevId) => ({
-      ...prevId,
-      [id]: value,
-    }));
-  };
-
-  const handleAddressChange = (e) => {
-    const { id, value } = e.target;
-    console.log(value);
-    setAddress((prevAddress) => ({
-      ...prevAddress,
-      [id]: value,
-    }));
-  };
-
-  const handleUserChange = (e) => {
-    const { id, value } = e.target;
-    setUser((prevUser) => ({
-      ...prevUser,
-      [id]: value,
-    }));
-  };
-
-  const handleCompanyChange = (e) => {
-    const { id, value } = e.target;
-    console.log(value);
-
-    setCompany((prevCompany) => ({
-      ...prevCompany,
-      [id]: value,
-    }));
-  };
-
-  const handleGeoChange = (e) => {
-    const { id, value } = e.target;
-    console.log(value);
-    setGeo((prevGeo) => ({
-      ...prevGeo,
-      [id]: value,
-    }));
-  };
-
-  // const handleAddUser = (e) => {
-  //   setUserData(() => ({
-  //     ...user,
-  //     address: { ...address, geo },
-  //     company: { ...company },
-  //     id:{..._id}
-  //   }));
-  //   updateUser(userData);
-  // };
-
-  const handleAddUser = (e) => {
-    // Update the state
-    const updatedUser = {
-      ...user,
-      address: { ...address, geo },
-      company: { ...company },
-      id: { ..._id },
-    };
-
-    // Update the state with the new user data
-    setUserData(() => {return updatedUser});
-    // Call updateUser with the updated user data
-    updateUser(userData);
-  };
+export const UserUpdate = () => {
+  const {
+    handleAddressChange,
+    handleUserChange,
+    handleCompanyChange,
+    handleGeoChange,
+    handleUpdateUser,
+    handleUpdateIdChange
+  } = useUserData();
 
   return (
     <div className='max-w-md mx-auto'>
       <div className='grid grid-cols-1 gap-4'>
-        <label className='font-bold'>_ID</label>
+        <label className='font-bold'>ID</label>
         <input
           className='w-full border rounded p-2 focus:border-blue-500 focus:outline-none'
           type='text'
           id='id'
-          onChange={handleIdChange}
+          onChange={handleUpdateIdChange}
         ></input>
         <label className='font-bold' htmlFor='username'>
           Username:
@@ -230,10 +143,10 @@ export const UserUpdate = ({ updateUser }) => {
 
       <div className='mt-5'>
         <button
-          onClick={handleAddUser}
+          onClick={handleUpdateUser}
           className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300'
         >
-          Add User
+          Update User
         </button>
       </div>
     </div>
