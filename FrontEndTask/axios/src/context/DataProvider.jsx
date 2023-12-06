@@ -77,16 +77,22 @@ export const DataProvider = ({ children }) => {
       company: { ...company },
       id: updateId?.id,
     }));
-  }, [geo, address, company,updateId]);
+  }, [geo, address, company, updateId]);
 
   const handleAddUser = () => {
     createUser(user);
   };
 
   const handleUpdateUser = () => {
-    console.log(user)
+    console.log(user);
     updateUser(user);
   };
+
+
+  const handleDeleteUser = ()=>{
+    deleteUser(user)
+  }
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -114,14 +120,22 @@ export const DataProvider = ({ children }) => {
   };
 
   const updateUser = (userData) => {
-    const {id} = userData;
+    const { id } = userData;
     console.log(userData);
-    console.log("id",id)
+    console.log('id', id);
     if (userData) {
       axios.post(
         `https://api-rest-1-mqvk.onrender.com/usersUpdate?_id=${id}`,
         userData
       );
+    }
+  };
+
+  const deleteUser = (userData) => {
+    const { id } = userData;
+    console.log(id)
+    if (id) {
+      axios.put(`https://api-rest-1-mqvk.onrender.com/usersdelete?_id=${id}`);
     }
   };
 
@@ -135,6 +149,7 @@ export const DataProvider = ({ children }) => {
         handleAddUser,
         handleUpdateUser,
         handleUpdateIdChange,
+        handleDeleteUser,
         data,
       }}
     >

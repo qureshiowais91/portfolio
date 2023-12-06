@@ -7,7 +7,7 @@ export const UserUpdate = () => {
     handleCompanyChange,
     handleGeoChange,
     handleUpdateUser,
-    handleUpdateIdChange
+    handleUpdateIdChange,
   } = useUserData();
 
   return (
