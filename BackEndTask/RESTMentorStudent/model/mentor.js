@@ -5,10 +5,10 @@ const mentorSchema = new Schema({
     type: String,
     required: true
   },
-  expertise: {
+  expertise: [{
     type: String,
     required: true
-  },
+  }],
   assignedStudents: [{
     type: Schema.Types.ObjectId,
     ref: 'Student'
@@ -17,4 +17,4 @@ const mentorSchema = new Schema({
 
 const Mentor = model('Mentor', mentorSchema);
 
-export default Mentor;
+export { Mentor };
