@@ -18,7 +18,7 @@ async function createMentor(req, res, next) {
         name,
         expertise
     });
-    const resp = await newMentor.save(newMentor);
+    const resp = await newMentor.save();
     res.status(201).json(resp);
 }
 
@@ -28,7 +28,7 @@ async function createMentor(req, res, next) {
  @param {import("mongoose").ObjectId} ObjectId // Object id of Mentor
  @param {Array} assignedStudents // Array of Stuent Object id to Add in Mentor Object 
  */
-async function addStuentToMentor(req, res, next) {
+async function addStudentToMentor(req, res, next) {
     const { mentorId, assignedStudents } = req.body;
     const updatedMentor = await Mentor.findByIdAndUpdate(
         mentorId, // Mentor ID to update
@@ -36,15 +36,14 @@ async function addStuentToMentor(req, res, next) {
         { new: true } // To return the updated document
     );
 
-
     if (!updatedMentor) {
         throw new ErrorResolver(304, 'Mentor not Updated'); // Handle if mentor not found
     }
     res.status(201).json(updatedMentor);
 }
 
-
-async function listofStuentByMentor(req, res, next) {
+// Write API to show all students for a particular mentor
+async function listofStudentByMentor(req, res, next) {
     const { mentorId } = req.body;
     const studentList = await Mentor.findById(mentorId).populate('assignedStudents');
 
@@ -55,12 +54,4 @@ async function listofStuentByMentor(req, res, next) {
     res.status(201).json(studentList);
 }
 
-
-export { mentor, createMentor, addStuentToMentor,listofStuentByMentor }
-
-// Write API to Assign a student to Mentor
-// A student who has a mentor should not be shown in List
-// Write API to Assign or Change Mentor for particular Student
-// Select One Student and Assign one Mentor
-// Write API to show all students for a particular mentor
-// Write an API to show the previously assigned mentor for a particular student.
+export { mentor, createMentor, addStudentToMentor, listofStudentByMentor }
