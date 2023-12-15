@@ -5,7 +5,7 @@ import { asyncHandler } from "../util/asyncHandler.js";
 
 router.get('/list', asyncHandler(student));
 router.post('/create', asyncHandler(createStudent));
-router.post('/assignMentors', asyncHandler(addMentorToStudent));
+router.post('/assignMentor', asyncHandler(addMentorToStudent));
 router.post('/listMentorByStudent', asyncHandler(listMentorByStudent));
 
 export { router };

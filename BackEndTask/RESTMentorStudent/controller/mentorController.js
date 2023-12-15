@@ -30,6 +30,7 @@ async function createMentor(req, res, next) {
  */
 async function addStudentToMentor(req, res, next) {
     const { mentorId, assignedStudents } = req.body;
+
     const updatedMentor = await Mentor.findByIdAndUpdate(
         mentorId, // Mentor ID to update
         { $addToSet: { assignedStudents: { $each: assignedStudents } } }, // Update: Add students to the assignedStudents array
@@ -37,7 +38,7 @@ async function addStudentToMentor(req, res, next) {
     );
 
     if (!updatedMentor) {
-        throw new ErrorResolver(304, 'Mentor not Updated'); // Handle if mentor not found
+        throw new ErrorResolver(302, 'Mentor not Updated'); // Handle if mentor not found
     }
     res.status(201).json(updatedMentor);
 }
