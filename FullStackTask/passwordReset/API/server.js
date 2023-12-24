@@ -4,14 +4,10 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Nodemailer setup
-const transporter = nodemailer.createTransport({
-    service: 'gmail', // Replace with your email service provider
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-});
+
+app.use(express.json())
+
+
 
 function generateRandomToken(length) {
     const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -31,14 +27,23 @@ const randomToken = generateRandomToken(tokenLength);
 console.log('Random Token:', randomToken);
 
 // Route for sending email with URL
-app.get('/send-url-email', async (req, res) => {
+app.post('/send-url-email', async (req, res) => {
     try {
-        const email = 'qureshiowais91@gmail.com';
+
+        
         const resetToken = generateRandomToken(tokenLength);
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.APP_PASS,
+            },
+        });
 
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: email,
+            to: req.body.email,
             subject: 'Password Reset',
             html: `
             <p>Click the link below to reset your password:</p>
@@ -56,7 +61,7 @@ app.get('/send-url-email', async (req, res) => {
 });
 
 app.post('/validate-url-email', async (req, res) => {
-  
+
 })
 
 app.listen(PORT, () => {
