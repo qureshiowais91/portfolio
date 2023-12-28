@@ -1,14 +1,32 @@
-    Students (Normalized):
+    Students:
         StudentID (Primary Key)
         Name
         Email
-        LanguageID (Foreign Key to Languages table)
+        LanguageID (Foreign Key to Languages)
+        CourseID (Foreign Key to Courses - enrolled course)
 
-    Mentor (Normalized):
-        MentorID (Primary Key)
-        Name
-        Email
-        SpecializationID (Foreign Key to Specializations table)
+    Courses:
+        CourseID (Primary Key)
+        CourseName
+        MentorID (Foreign Key to Students - referring to a student who teaches the course)
+
+    Enrollments:
+        EnrollmentID (Primary Key)
+        StudentID (Foreign Key to Students)
+        CourseID (Foreign Key to Courses)
+        EnrollmentDate
+
+    Assignments:
+        AssignmentID (Primary Key)
+        AssignmentName
+        Description
+        Deadline
+
+    Student_Assignment:
+        StudentID (Foreign Key to Students)
+        AssignmentID (Foreign Key to Assignments)
+        SubmissionStatus
+        SubmissionDate
 
     Languages:
         LanguageID (Primary Key)
@@ -17,3 +35,15 @@
     Specializations:
         SpecializationID (Primary Key)
         SpecializationName
+
+Relationships:
+    Mentors (Teachers): Certain mentors are associated with specific courses they teach.
+    Students (Enrollees): students are enrolled in these courses.
+    Enrollments: Tracks students' enrollments in courses.
+    Assignments and Students: Tracks students' assignment submissions.
+    Languages and Specializations: Additional information about languages and specializations associated with students.
+
+
+
+sure there could be more such as attendence and query module 
+please let me know if need to add that too it just demostration of basic understanding of learning SQL ERD
