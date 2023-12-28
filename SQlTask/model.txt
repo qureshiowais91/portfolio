@@ -1,0 +1,19 @@
+    Students (Normalized):
+        StudentID (Primary Key)
+        Name
+        Email
+        LanguageID (Foreign Key to Languages table)
+
+    Mentor (Normalized):
+        MentorID (Primary Key)
+        Name
+        Email
+        SpecializationID (Foreign Key to Specializations table)
+
+    Languages:
+        LanguageID (Primary Key)
+        LanguageName
+
+    Specializations:
+        SpecializationID (Primary Key)
+        SpecializationName
