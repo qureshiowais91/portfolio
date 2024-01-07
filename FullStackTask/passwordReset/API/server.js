@@ -3,12 +3,13 @@ const nodemailer = require("nodemailer");
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
+const Redis = require("ioredis");
+const { REDIS_URI } = process.env;
+const renderRedis = new Redis(REDIS_URI);
+const cors = require('cors');
 
-
-app.use(express.json())
-
-
-
+app.use(express.json());
+app.use(cors());
 function generateRandomToken(length) {
     const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let token = '';
@@ -20,19 +21,30 @@ function generateRandomToken(length) {
 
     return token;
 }
-
-// Usage example:
 const tokenLength = 20; // Adjust the length as needed
 const randomToken = generateRandomToken(tokenLength);
 console.log('Random Token:', randomToken);
 
+app.get("/check-email", async (req, res) => {
+    try {
+        const email = req.query.email;
+        const value = await renderRedis.get(email);
+        if (value == null) {
+            renderRedis.set(email, email);// will get emaill with emaill next  time if needed   not issue as its just learning demo 
+            res.status(404).json({ "msg": false });
+        } else {
+            res.status(201).json({ "Email": value });
+        }
+    } catch (error) {
+        res.status(404).json({ "msg": false });
+    }
+})
+
 // Route for sending email with URL
 app.post('/send-url-email', async (req, res) => {
     try {
-
-        
         const resetToken = generateRandomToken(tokenLength);
-
+        const email = req.body.email
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -43,25 +55,41 @@ app.post('/send-url-email', async (req, res) => {
 
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: req.body.email,
+            to: email,
             subject: 'Password Reset',
             html: `
             <p>Click the link below to reset your password:</p>
-            <a href="https://resetpassword91.netlify.app/validate-url-email/${resetToken}">Reset Password</a>
+            localhost:5173/resetPassword/${resetToken}
         `,
         };
 
         const info = await transporter.sendMail(mailOptions);
         console.log('Email sent: ' + info.response);
-        res.send('Email sent successfully');
+        res.status(200).json({ 'msg': 'Email sent successfully'});
+        renderRedis.set(resetToken, email);
+
     } catch (error) {
         console.error('Error sending email:', error);
         res.status(500).send('Error sending email');
     }
 });
 
-app.post('/validate-url-email', async (req, res) => {
-
+app.get('/validate-url-email', async (req, res) => {
+    try {
+        const { resetToken } = req.query;
+        const value = await renderRedis.get(resetToken);
+        console.log(value)
+        if (value != null) {
+            renderRedis.del(resetToken);
+            // resetToken validated so redirection to passwordreset form
+            res.redirect('http://localhost:5173/resetPassword');
+        } else {
+            throw Error("Invalid ResetToken")
+        }
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).json({ error: error.message });
+    }
 })
 
 app.listen(PORT, () => {

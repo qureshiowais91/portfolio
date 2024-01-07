@@ -1,6 +1,45 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.jsx';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { SendLink } from './components/SendResetLink.jsx';
+import { Login } from './components/Login.jsx';
+import { Register } from './components/Register.jsx';
+import { ResetPassword } from './components/ResetPassword.jsx';
+import { QueryClientProvider, QueryClient } from 'react-query';
+import LayoutMenu from './components/Layout.jsx';
+
+import './App.css';
 import './index.css';
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App type='Class' />);
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <LayoutMenu />,
+    children: [
+      {
+        path: '/sendLink',
+        element: <SendLink />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
+      },
+      {
+        path: '/login',
+        element: <Login />,
+      },
+      {
+        path: '/resetPassword/:token', // Dynamic segment ':token' in the path
+        element: <ResetPassword />
+      },
+    ],
+  },
+]);
+
+const queryClient = new QueryClient();
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router}></RouterProvider>
+  </QueryClientProvider>
+);
