@@ -101,7 +101,7 @@ app.post("/login", async (req, res) => {
         if (password === DBpassword) {
             res.status(200).json({ "status": true })
         }else{
-            throw Error("Password Incorrect");
+            res.status(200).json({ "status": false })
         }
     } catch (error) {
         console.error(error);
