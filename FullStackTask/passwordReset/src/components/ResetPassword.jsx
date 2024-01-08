@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Typography, TextField, Button, Container, Stack } from '@mui/material';
-import {useParams} from 'react-router-dom';
+import { Typography, TextField, Button, Stack } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import { instance } from '../apiEndpoints';
 
 export const ResetPassword = () => {
   const [formData, setFormData] = useState({
@@ -9,8 +10,8 @@ export const ResetPassword = () => {
     password: '',
   });
 
-  const {token} =useParams();
-  console.log(token)
+  const { token } = useParams();
+  console.log(token);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -23,10 +24,12 @@ export const ResetPassword = () => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     setFormData({
-      username: '',
       email: '',
       password: '',
     });
+
+   const data = {"userEmail": formData.email, "password":formData.password,"token":token}
+   instance.post('/validate-token',data);
   };
 
   return (
@@ -50,15 +53,6 @@ export const ResetPassword = () => {
             name='email'
             type='email'
             value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
-         <TextField
-            label='Password'
-            variant='outlined'
-            name='password'
-            type='password'
-            value={formData.password}
             onChange={handleInputChange}
             required
           />

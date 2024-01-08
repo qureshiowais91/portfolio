@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, TextField, Button, Container, Stack } from '@mui/material';
+import { instance } from '../apiEndpoints';
 
 export const Login = () => {
   const [formData, setFormData] = useState({
@@ -20,10 +21,16 @@ export const Login = () => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     setFormData({
-      username: '',
       email: '',
       password: '',
     });
+
+    const data = {
+      email: formData.email,
+      password: formData.password,
+    };
+
+   instance.post('/login', data);
   };
 
   return (

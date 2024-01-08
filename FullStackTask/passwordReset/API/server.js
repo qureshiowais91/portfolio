@@ -22,8 +22,6 @@ function generateRandomToken(length) {
     return token;
 }
 const tokenLength = 20; // Adjust the length as needed
-const randomToken = generateRandomToken(tokenLength);
-console.log('Random Token:', randomToken);
 
 app.get("/check-email", async (req, res) => {
     try {
@@ -43,7 +41,7 @@ app.get("/check-email", async (req, res) => {
 // Route for sending email with URL
 app.post('/send-url-email', async (req, res) => {
     try {
-        const resetToken = generateRandomToken(tokenLength);
+        const resetToken = generateRandomToken(8);
         const email = req.body.email
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -65,8 +63,10 @@ app.post('/send-url-email', async (req, res) => {
 
         const info = await transporter.sendMail(mailOptions);
         console.log('Email sent: ' + info.response);
-        res.status(200).json({ 'msg': 'Email sent successfully'});
+        res.status(200).json({ 'msg': 'Email sent successfully' });
         renderRedis.set(resetToken, email);
+        console.log('Email sent: ' + resetToken + ' ' + email);
+
 
     } catch (error) {
         console.error('Error sending email:', error);
@@ -74,23 +74,43 @@ app.post('/send-url-email', async (req, res) => {
     }
 });
 
-app.get('/validate-url-email', async (req, res) => {
+app.post('/validate-token', async (req, res) => {
     try {
-        const { resetToken } = req.query;
-        const value = await renderRedis.get(resetToken);
-        console.log(value)
-        if (value != null) {
-            renderRedis.del(resetToken);
-            // resetToken validated so redirection to passwordreset form
-            res.redirect('http://localhost:5173/resetPassword');
+        const { token, userEmail, password } = req.body;
+        const email = await renderRedis.get(token);
+
+        if (email === userEmail) {
+            renderRedis.del(token);
+            renderRedis.set(email, password);
         } else {
-            throw Error("Invalid ResetToken")
+            renderRedis.del(token);
+            throw Error("Invalid ResetToken");
+
         }
     } catch (error) {
         console.error('Error sending email:', error);
         res.status(500).json({ error: error.message });
     }
 })
+
+app.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const DBpassword = await renderRedis.get(email);
+        if (password === DBpassword) {
+            res.status(200).json({ "status": true })
+        }else{
+            throw Error("Password Incorrect");
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+
+})
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
