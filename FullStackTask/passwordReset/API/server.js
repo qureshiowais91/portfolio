@@ -57,7 +57,7 @@ app.post('/send-url-email', async (req, res) => {
             subject: 'Password Reset',
             html: `
             <p>Click the link below to reset your password:</p>
-            https://cutekitten.netlify.app/resetPassword/${resetToken}
+            https://dapperfoxey.netlify.app/resetPassword/${resetToken}
         `,
         };
 
