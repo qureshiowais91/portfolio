@@ -57,7 +57,7 @@ app.post('/send-url-email', async (req, res) => {
             subject: 'Password Reset',
             html: `
             <p>Click the link below to reset your password:</p>
-            https://transcendent-scone-92e758.netlify.app/resetPassword/${resetToken}
+            https://cutekitten.netlify.app/resetPassword/${resetToken}
         `,
         };
 
