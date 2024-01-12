@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
-import { Typography, TextField, Button, Stack } from '@mui/material';
-import { instance } from '../apiEndpoints';
+import {
+  Typography,
+  TextField,
+  Button,
+  Stack,
+  Alert,
+  Collapse,
+} from '@mui/material';
+import { sendRequest } from '../apiEndpoints';
 
 export const SendLink = () => {
   const [formData, setFormData] = useState({
     email: '',
   });
+
+  const [error, setError] = useState();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -21,8 +30,15 @@ export const SendLink = () => {
     setFormData({
       email: '',
     });
-    console.log(formData);
-    instance.post('/send-url-email', { email: formData.email });
+
+    (async () => {
+      const res = await sendRequest(
+        '/send-url-email',
+        { email: formData.email },
+        'POST'
+      );
+      setError(res);
+    })();
   };
 
   return (
@@ -33,6 +49,12 @@ export const SendLink = () => {
       spacing={4}
     >
       <Typography variant='h4'>Send Reset Link</Typography>
+      <Collapse in={error === false}>
+        <Alert severity='error'>Error: Reload Page And Try Again!!!</Alert>
+      </Collapse>
+      <Collapse in={error === true}>
+        <Alert severity='success'>Check Inbox For Link</Alert>
+      </Collapse>
       <form onSubmit={handleSubmit}>
         <Stack
           direction='column'
@@ -49,7 +71,7 @@ export const SendLink = () => {
             onChange={handleInputChange}
             required
           />
-          <Button type='submit' variant='contained' color='primary'>
+          <Button onClick={handleSubmit} variant='contained' color='primary'>
             Get Reset Link
           </Button>
         </Stack>

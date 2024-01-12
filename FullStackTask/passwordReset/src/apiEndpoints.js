@@ -1,7 +1,25 @@
-import Axios from "axios";
+const baseUrl = 'https://resetpasswordurl.onrender.com';
 
-export const instance = Axios.create({
-    baseURL: 'http://127.0.0.1:3000',
-    timeout: 1000,
-    headers: { 'Content-Type': 'application/json' }
-});
+const headers = {
+    'Content-Type': 'application/json',
+};
+
+export const sendRequest = async (path, data, method) => {
+    try {
+        const response = await fetch(`${baseUrl}${path}`, {
+            method: method.toUpperCase(),
+            headers: headers,
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Request failed with status ${response.status}`);
+        }
+        console.log("false");
+        return true;
+    } catch (error) {
+        console.log("true");
+        console.error(error.message);
+        return false
+    }
+};

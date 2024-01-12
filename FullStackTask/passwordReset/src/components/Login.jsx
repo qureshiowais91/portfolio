@@ -3,12 +3,11 @@ import {
   Typography,
   TextField,
   Button,
-  Container,
   Stack,
   Alert,
   Collapse,
 } from '@mui/material';
-import { instance } from '../apiEndpoints';
+import { sendRequest } from '../apiEndpoints';
 
 export const Login = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +15,7 @@ export const Login = () => {
     password: '',
   });
 
-  const [login, setLogin] = useState("");
+  const [error, setError] = useState();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -39,12 +38,10 @@ export const Login = () => {
       password: formData.password,
     };
 
-    instance.post('/login', data).then((res) => {
-      const value = res?.data?.status === true ? true : false;
-
-      console.log(value);
-      setLogin(value);
-    });
+    (async () => {
+      const res = await sendRequest('/login', data, 'POST');
+      setError(res);
+    })();
   };
 
   return (
@@ -54,16 +51,16 @@ export const Login = () => {
       alignItems='center'
       spacing={4}
     >
-      <Collapse in={login===false}>
+      <Collapse in={error === true}>
         <Alert severity='error'>Incorrect Password</Alert>
       </Collapse>
-      <Collapse in={login===true}>
+      <Collapse in={error === false}>
         <Alert severity='success'>Password Is Correct</Alert>
       </Collapse>
       <Typography variant='h4'>Login</Typography>
       <form onSubmit={handleSubmit}>
         <Stack
-          direction='column'  
+          direction='column'
           justifyContent='center'
           alignItems='center'
           spacing={4}
@@ -87,7 +84,7 @@ export const Login = () => {
             required
           />
           <Button type='submit' variant='contained' color='primary'>
-            Register
+            Login
           </Button>
         </Stack>
       </form>

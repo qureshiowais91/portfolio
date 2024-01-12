@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Typography, TextField, Button, Stack } from '@mui/material';
+import { Typography, TextField, Button, Stack,Collapse,Alert } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { instance } from '../apiEndpoints';
-
+import { sendRequest } from '../apiEndpoints';
 export const ResetPassword = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
   });
+  const [error, setError] = useState();
 
   const { token } = useParams();
   console.log(token);
@@ -28,8 +28,16 @@ export const ResetPassword = () => {
       password: '',
     });
 
-   const data = {"userEmail": formData.email, "password":formData.password,"token":token}
-   instance.post('/validate-token',data);
+    const data = {
+      userEmail: formData.email,
+      password: formData.password,
+      token: token,
+    };
+
+    (async () => {
+      const res = await sendRequest('/validate-token', data, 'POST');
+      setError(res);
+    })();
   };
 
   return (
@@ -41,6 +49,12 @@ export const ResetPassword = () => {
     >
       <Typography variant='h4'>Reset Password</Typography>
       <form onSubmit={handleSubmit}>
+      <Collapse in={error === true}>
+        <Alert severity='error'>Error Try Again With New Link</Alert>
+      </Collapse>
+      <Collapse in={error === false}>
+        <Alert severity='success'>Password Successfuly Changed</Alert>
+      </Collapse>
         <Stack
           direction='column'
           justifyContent='center'
