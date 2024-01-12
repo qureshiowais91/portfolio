@@ -10,6 +10,7 @@ const cors = require('cors');
 
 app.use(express.json());
 app.use(cors());
+
 function generateRandomToken(length) {
     const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let token = '';
@@ -28,7 +29,7 @@ app.get("/check-email", async (req, res) => {
         const email = req.query.email;
         const value = await renderRedis.get(email);
         if (value == null) {
-            renderRedis.set(email, email);// will get emaill with emaill next  time if needed   not issue as its just learning demo 
+            renderRedis.set(email, email);// will get email with emaill next  time if needed   not issue as its just learning demo 
             res.status(404).json({ "msg": false });
         } else {
             res.status(201).json({ "Email": value });
@@ -85,8 +86,8 @@ app.post('/validate-token', async (req, res) => {
         } else {
             renderRedis.del(token);
             throw Error("Invalid ResetToken");
-
         }
+        res.status(200).json({"msg":"password changed"})
     } catch (error) {
         console.error('Error sending email:', error);
         res.status(500).json({ error: error.message });
