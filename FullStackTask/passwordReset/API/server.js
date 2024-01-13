@@ -22,7 +22,6 @@ function generateRandomToken(length) {
 
     return token;
 }
-const tokenLength = 20; // Adjust the length as needed
 
 app.get("/check-email", async (req, res) => {
     try {
@@ -87,7 +86,7 @@ app.post('/validate-token', async (req, res) => {
             renderRedis.del(token);
             throw Error("Invalid ResetToken");
         }
-        res.status(200).json({"msg":"password changed"})
+        res.status(200).json({ "msg": "password changed" })
     } catch (error) {
         console.error('Error sending email:', error);
         res.status(500).json({ error: error.message });
@@ -98,10 +97,22 @@ app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     try {
+
+
+
+
+        const email = req.email;
+        const value = await renderRedis.get(email);
+
+        if (!value) {
+            renderRedis.set(email, email);
+            res.status(404).json({ "msg": false });
+        }
+
         const DBpassword = await renderRedis.get(email);
         if (password === DBpassword) {
             res.status(200).json({ "status": true })
-        }else{
+        } else {
             res.status(200).json({ "status": false })
         }
     } catch (error) {
