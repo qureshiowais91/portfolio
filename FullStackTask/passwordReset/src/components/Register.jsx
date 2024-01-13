@@ -69,7 +69,7 @@ export const Register = () => {
             required
           />
           <Button type='submit' variant='contained' color='primary'>
-            Register
+            Register1
           </Button>
         </Stack>
       </form>

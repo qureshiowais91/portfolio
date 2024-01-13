@@ -49,10 +49,10 @@ export const SendLink = () => {
       spacing={4}
     >
       <Typography variant='h4'>Send Reset Link</Typography>
-      <Collapse in={error === false}>
+      <Collapse in={error === true}>
         <Alert severity='error'>Error: Reload Page And Try Again!!!</Alert>
       </Collapse>
-      <Collapse in={error === true}>
+      <Collapse in={error === false}>
         <Alert severity='success'>Check Inbox For Link</Alert>
       </Collapse>
       <form onSubmit={handleSubmit}>

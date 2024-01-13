@@ -16,10 +16,10 @@ export const sendRequest = async (path, data, method) => {
             throw new Error(`Request failed with status ${response.status}`);
         }
         console.log("false");
-        return true;
+        return false;
     } catch (error) {
         console.log("true");
         console.error(error.message);
-        return false
+        return true
     }
 };

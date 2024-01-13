@@ -1,17 +1,26 @@
 import React, { useState } from 'react';
-import { Typography, TextField, Button, Stack,Collapse,Alert } from '@mui/material';
+import {
+  Typography,
+  TextField,
+  Button,
+  Stack,
+  Collapse,
+  Alert,
+} from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { sendRequest } from '../apiEndpoints';
+
 export const ResetPassword = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
   });
+
   const [error, setError] = useState();
 
   const { token } = useParams();
-  console.log(token);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -49,12 +58,12 @@ export const ResetPassword = () => {
     >
       <Typography variant='h4'>Reset Password</Typography>
       <form onSubmit={handleSubmit}>
-      <Collapse in={error === true}>
-        <Alert severity='error'>Error Try Again With New Link</Alert>
-      </Collapse>
-      <Collapse in={error === false}>
-        <Alert severity='success'>Password Successfuly Changed</Alert>
-      </Collapse>
+        <Collapse in={error === true}>
+          <Alert severity='error'>Error Try Again With New Link</Alert>
+        </Collapse>
+        <Collapse in={error ===  false}>
+          <Alert severity='success'>Password Successfuly Changed</Alert>
+        </Collapse>
         <Stack
           direction='column'
           justifyContent='center'
@@ -80,7 +89,7 @@ export const ResetPassword = () => {
             required
           />
           <Button type='submit' variant='contained' color='primary'>
-            Register
+            Reset Password
           </Button>
         </Stack>
       </form>
