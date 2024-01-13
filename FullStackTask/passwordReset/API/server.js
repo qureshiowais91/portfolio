@@ -97,11 +97,7 @@ app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     try {
-
-
-
-
-        const email = req.email;
+        
         const value = await renderRedis.get(email);
 
         if (!value) {
