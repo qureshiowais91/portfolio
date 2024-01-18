@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Center all content vertically and horizontally */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  /* Optional: Add additional styles for specific elements if needed */
+  .container {
+    /* Your container styles */
+  }
+  
+  .card {
+    /* Your card styles */
+  }
+  
+  .list-group {
+    /* Your list group styles */
+  }
+  
+  /* Additional element styles as needed */
+  
