@@ -1,6 +1,5 @@
-const Song = require('../models').Song;
+const { Song } = require('../models/song');
 
-// Get all songs
 const getAllSongs = async (req, res) => {
     try {
         const songs = await Song.find();
@@ -10,7 +9,6 @@ const getAllSongs = async (req, res) => {
     }
 };
 
-// Get a specific song by ID
 const getSongById = async (req, res) => {
     try {
         const song = await Song.findById(req.params.id);
@@ -23,7 +21,6 @@ const getSongById = async (req, res) => {
     }
 };
 
-// Create a new song
 const createSong = async (req, res) => {
     const { title, artist, album, genre, url, releaseDate } = req.body;
 
@@ -36,8 +33,28 @@ const createSong = async (req, res) => {
     }
 };
 
+// const uploadSong = async (req, res) => {
+//     const form_data = req.body;
+
+//     // Store other form data in MongoDB
+//     const FormModel = mongoose.model('Form', new mongoose.Schema({}));
+//     const formDataInstance = new FormModel(form_data);
+//     formDataInstance.save();
+
+//     // Handle file upload using GridFS
+//     const buffer = req.file.buffer;
+//     const writestream = gfs.createWriteStream({
+//         filename: crypto.randomBytes(16).toString('hex'),
+//     });
+//     writestream.write(buffer);
+//     writestream.end();
+
+//     // Return a response (customize based on your needs)
+//     res.json({ message: 'Data stored successfully' });
+// };
+
 module.exports = {
     getAllSongs,
     getSongById,
-    createSong,
+    createSong
 };

@@ -1,4 +1,4 @@
-const Genre = require('../models').Genre;
+const {Genre} = require('../models/song');
 
 // Get all genres
 const getAllGenres = async (req, res) => {

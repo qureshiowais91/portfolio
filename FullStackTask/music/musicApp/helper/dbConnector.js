@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Sequelize } = require('sequelize');
+
 
 const connectDB = async () => {
   try {
@@ -14,10 +14,4 @@ const connectDB = async () => {
   }
 };
 
-
-const sequelize = new Sequelize('your_database_name', 'your_username', 'your_password', {
-  host: 'localhost',
-  dialect: 'mysql',
-});
-
-module.exports = { connectDB, sequelize };
+module.exports = { connectDB, connectAndInitializeGridFS };
