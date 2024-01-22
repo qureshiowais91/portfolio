@@ -65,14 +65,14 @@ app.get('/stream/', (req, res) => {
   const lastEnd = parseInt(req.query.lastEnd) || 0;
 
   const fileStream = gridfsBucket.openDownloadStreamByName(filename, {
-    chunkSizeBytes: 1024 * 1024, // Adjust the chunk size as needed
+    chunkSizeBytes: process.env.CHUNK_SIZE, // Adjust the chunk size as needed
   });
 
   res.set('Content-Type', 'audio/mpeg');
   res.set('Content-Disposition', 'inline; filename=' + filename);
 
   const start = lastEnd;
-  const end = lastEnd + 1024 * 1024;
+  const end = lastEnd + process.env.CHUNK_SIZE;
 
   const chunkSize = (end - start) + 1;
   res.set('Access-Control-Allow-Origin', '*'); // Adjust the origin as needed
