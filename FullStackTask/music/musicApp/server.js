@@ -72,7 +72,7 @@ app.get('/stream/', (req, res) => {
   res.set('Content-Disposition', 'inline; filename=' + filename);
 
   const start = lastEnd;
-  const end = lastEnd + process.env.CHUNK_SIZE;
+  const end = lastEnd + parseInt(process.env.CHUNK_SIZE);
 
   const chunkSize = (end - start) + 1;
   res.set('Access-Control-Allow-Origin', '*'); // Adjust the origin as needed
@@ -88,6 +88,30 @@ app.get('/stream/', (req, res) => {
 
   fileStream.pipe(res, { start, end: end + 1 });
 });
+
+
+// app.get('/stream/', (req, res) => {
+//   const filename = req.query.file;
+
+//   // Open a read stream for the file
+//   var fileStream
+//   if(gridfsBucket){
+//    fileStream = gridfsBucket.openDownloadStreamByName(filename);
+//   }
+
+//   // Set response headers
+//   res.set({
+//     'Content-Type': 'audio/mpeg',
+//     'Content-Disposition': 'inline; filename=' + filename,
+//     'Access-Control-Allow-Origin': '*', // Adjust the origin as needed
+//     'Access-Control-Allow-Methods': 'GET, OPTIONS', // Adjust the allowed methods
+//     'Access-Control-Allow-Headers': 'Range, Accept-Ranges, Content-Type',
+//     'Accept-Ranges': 'bytes',
+//   });
+
+//   // Pipe the file stream to the response
+//   fileStream.pipe(res);
+// });
 
 
 app.use(errorHandler);
