@@ -5,18 +5,31 @@ const authRouter = require('./routes/authRouter.js');
 const songRouter = require('./routes/songRouter.js');
 const genreRouter = require('./routes/genreRouter.js');
 const multer = require('multer');
-const { MongoClient, GridFSBucket } = require('mongodb'); // Import ObjectID from mongodb
 const cors = require('cors');  // Import the cors middleware
 require('dotenv').config();
 const compression = require('compression');
 
 const app = express();
+
+app.use(cors())
 app.use(express.json());
-app.use(cors()); 
-app.use(compression());
 console.log(process.env.MONGODB_URI);
 
-app.use('/api/auth', authRouter);
+app.use((req, res, next) => {
+  console.log('Request received:', req.method, req.url);
+  next();
+});
+
+app.use((req, res, next) => {
+  res.on('finish', () => {
+    console.log('Response sent:', res.statusCode);
+  });
+  next();
+});
+
+
+
+app.use('/api/auth',cors(), authRouter);
 app.use('/api/song', songRouter);
 app.use('/api/genres', genreRouter);
 
@@ -78,7 +91,7 @@ app.get('/stream/', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*'); // Adjust the origin as needed
   res.set('Access-Control-Allow-Methods', 'GET, OPTIONS'); // Adjust the allowed methods
   res.set('Access-Control-Allow-Headers', 'Range, Accept-Ranges, Content-Type');
-  res.set('Accept-Ranges', 'bytes');
+  res.set('Range', `bytes-${start}-${end}`);
 
   res.status(206).set({
     'Content-Range': `bytes`,
