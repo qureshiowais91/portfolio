@@ -8,7 +8,7 @@ async function registerUser(req, res) {
     const { username, email, password } = req.body;
 
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-    
+
     if (existingUser) {
       return res.status(400).json({ message: 'User with this username or email already exists.' });
     }
@@ -23,7 +23,7 @@ async function registerUser(req, res) {
 
     await newUser.save();
 
-    res.status(201).json({ message: 'User registered successfully.' ,status:true});
+    res.status(201).json({ message: 'User registered successfully.', status: true });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
@@ -48,10 +48,10 @@ async function loginUser(req, res) {
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    res.status(200).json({ token, userId: user._id, email: user.email });
+    res.status(200).json({ token, email: user.email });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ errorMsg: true, errorMsg: 'Internal Server Error' });
   }
 }
 
