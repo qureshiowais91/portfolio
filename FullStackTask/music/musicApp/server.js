@@ -7,7 +7,6 @@ const genreRouter = require('./routes/genreRouter.js');
 const multer = require('multer');
 const cors = require('cors');  // Import the cors middleware
 require('dotenv').config();
-const compression = require('compression');
 
 const app = express();
 
@@ -27,9 +26,7 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
-app.use('/api/auth',cors(), authRouter);
+app.use('/api/auth', cors(), authRouter);
 app.use('/api/song', songRouter);
 app.use('/api/genres', genreRouter);
 
