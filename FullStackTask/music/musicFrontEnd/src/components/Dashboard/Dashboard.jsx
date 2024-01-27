@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Paper, Grid } from '@mui/material';
+import { Container, Paper, Grid } from '@mui/material';
 import MusicPlayer from '../Player/Player';
 import SongList from '../SongList/SongList';
 import GenreTag from '../Genre/Genre';
