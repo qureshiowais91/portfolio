@@ -1,60 +1,121 @@
-const { Song } = require('../models/song');
+// controllers/songController.js
+const { Song, Genre } = require('../models/song');
 
-const getAllSongs = async (req, res) => {
-    try {
-        const songs = await Song.find();
-        res.json(songs);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-const getSongById = async (req, res) => {
-    try {
-        const song = await Song.findById(req.params.id);
-        if (!song) {
-            return res.status(404).json({ message: 'Song not found' });
-        }
-        res.json(song);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
+// Create a new song
 const createSong = async (req, res) => {
-    const { title, artist, album, genre, url, releaseDate } = req.body;
-
     try {
-        const song = new Song({ title, artist, album, genre, url, releaseDate });
-        const newSong = await song.save();
+        const { title, artist, album, genreId, songFile, releaseDate } = req.body;
+
+        // Check if the genre exists
+        const genre = await Genre.findById(genreId);
+        if (!genre) {
+            return res.status(400).json({ message: 'Invalid genre ID.' });
+        }
+
+        const newSong = new Song({
+            title,
+            artist,
+            album,
+            genre: genreId,
+            songFile: Buffer.from(songFile, 'base64'), // Assuming songFile is base64 encoded
+            releaseDate,
+        });
+
+        await newSong.save();
+
         res.status(201).json(newSong);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 
-// const uploadSong = async (req, res) => {
-//     const form_data = req.body;
+// Get all songs
+const getAllSongs = async (req, res) => {
+    try {
+        const songs = await Song.find().populate('genre');
+        res.status(200).json(songs);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
 
-//     // Store other form data in MongoDB
-//     const FormModel = mongoose.model('Form', new mongoose.Schema({}));
-//     const formDataInstance = new FormModel(form_data);
-//     formDataInstance.save();
+// Get a song by ID
+const getSongById = async (req, res) => {
+    try {
+        const songId = req.params.id;
 
-//     // Handle file upload using GridFS
-//     const buffer = req.file.buffer;
-//     const writestream = gfs.createWriteStream({
-//         filename: crypto.randomBytes(16).toString('hex'),
-//     });
-//     writestream.write(buffer);
-//     writestream.end();
+        const song = await Song.findById(songId).populate('genre');
 
-//     // Return a response (customize based on your needs)
-//     res.json({ message: 'Data stored successfully' });
-// };
+        if (!song) {
+            return res.status(404).json({ message: 'Song not found.' });
+        }
+
+        res.status(200).json(song);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+// Update a song by ID
+const updateSongById = async (req, res) => {
+    try {
+        const songId = req.params.id;
+        const { title, artist, album, genreId, releaseDate } = req.body;
+
+        // Check if the genre exists
+        const genre = await Genre.findById(genreId);
+        if (!genre) {
+            return res.status(400).json({ message: 'Invalid genre ID.' });
+        }
+
+        const updatedSong = await Song.findByIdAndUpdate(
+            songId,
+            {
+                title,
+                artist,
+                album,
+                genre: genreId,
+                releaseDate,
+            },
+            { new: true, runValidators: true }
+        ).populate('genre');
+
+        if (!updatedSong) {
+            return res.status(404).json({ message: 'Song not found.' });
+        }
+
+        res.status(200).json(updatedSong);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+// Delete a song by ID
+const deleteSongById = async (req, res) => {
+    try {
+        const songId = req.params.id;
+
+        const deletedSong = await Song.findByIdAndRemove(songId).populate('genre');
+
+        if (!deletedSong) {
+            return res.status(404).json({ message: 'Song not found.' });
+        }
+
+        res.status(200).json(deletedSong);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
 
 module.exports = {
+    createSong,
     getAllSongs,
     getSongById,
-    createSong
+    updateSongById,
+    deleteSongById,
 };
