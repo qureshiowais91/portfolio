@@ -3,6 +3,7 @@ import { Container, Typography, Paper, Grid } from '@mui/material';
 import MusicPlayer from '../Player/Player';
 import SongList from '../SongList/SongList';
 import GenreTag from '../Genre/Genre';
+import Divider from '@mui/material/Divider';
 
 const Dashboard = () => {
   const genres = [
@@ -22,7 +23,7 @@ const Dashboard = () => {
     { id: 14, name: 'Alternative' },
     { id: 15, name: 'Soul' },
   ];
-  
+
   return (
     <Container maxWidth='xl'>
       <Grid container spacing={3}>
@@ -31,12 +32,13 @@ const Dashboard = () => {
             <GenreTag key={genre.id} genre={genre.name} />
           ))}
         </Grid>
-
-        <Grid item xs={6}>
+        <Grid item xs={5}>
           <SongList></SongList>
         </Grid>
-
-        <Grid item xs={6}>
+        <Grid item xs={2}>
+          <Divider orientation='vertical' />
+        </Grid>
+        <Grid item xs={5}>
           <Paper>
             <MusicPlayer />
           </Paper>

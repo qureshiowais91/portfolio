@@ -6,7 +6,6 @@ const GenreTag = ({ genre }) => {
   const buttonStyle = {
     backgroundColor: 'transparent',
     borderRadius: '20px', // Adjust the radius to your preference
-    border: '1px solid #fff', // Add border for better visibility
     color: '#000',
     margin:'2rem'
   };
