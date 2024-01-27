@@ -6,56 +6,51 @@ import {
   ButtonGroup,
   Divider,
   Toolbar,
+  ThemeProvider,
+  createTheme,
+  Container,
 } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import makeStyles from '@emotion/styled';
 
-const useStyles = makeStyles((theme) => ({
-  appBar: {
+const theme = createTheme();
+
+const LayoutMenu = () => {
+  const appBarStyle = {
     backgroundColor: '#fff', // Change this to your desired color
-  },
-  toolbar: {
+  };
+
+  const toolbarStyle = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  title: {
-    flexGrow: 1,
-    textAlign: 'left',
-  },
-  divider: {
-    margin: theme.spacing(0, 3),
-  },
-  loginButton: {
-    marginRight: theme.spacing(3),
-  },
-}));
+  };
 
-const LayoutMenu = () => {
-  const classes = useStyles();
+  const dividerStyle = {
+    margin: theme.spacing(0, 3),
+  };
 
   return (
-    <>
-      <AppBar className={classes.appBar} color=''>
-        <Toolbar className={classes.toolbar}>
-          <Divider
-            spacing='2'
-            orientation='vertical'
-            variant='middle'
-            className={classes.divider}
-          />
-          <ButtonGroup variant='outlined' aria-label=' primary button group'>
-            <Button>
-              <NavLink to='/'>Login</NavLink>
-            </Button>
-            <Button>
-              <NavLink to='/register'>Register</NavLink>
-            </Button>
-          </ButtonGroup>
-        </Toolbar>
-      </AppBar>
-      <Outlet />
-    </>
+    <ThemeProvider theme={theme}>
+        <AppBar style={appBarStyle} color=''>
+          <Toolbar style={toolbarStyle}>
+            <Divider
+              spacing='2'
+              orientation='vertical'
+              variant='middle'
+              style={dividerStyle}
+            />
+            <ButtonGroup variant='outlined' aria-label=' primary button group'>
+              <Button>
+                <NavLink to='/'>Login</NavLink>
+              </Button>
+              <Button>
+                <NavLink to='/register'>Register</NavLink>
+              </Button>
+            </ButtonGroup>
+          </Toolbar>
+        </AppBar>
+        <Outlet />
+    </ThemeProvider>
   );
 };
 

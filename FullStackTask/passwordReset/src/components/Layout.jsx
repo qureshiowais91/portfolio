@@ -1,14 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  AppBar,
-  Button,
-  CssBaseline,
-  ButtonGroup,
-  Divider,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import { AppBar, Button, ButtonGroup, Divider, Toolbar } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import makeStyles from '@emotion/styled';
 

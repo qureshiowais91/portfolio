@@ -1,12 +1,25 @@
 import React, { useState } from 'react';
-import { Typography, TextField, Button, Container, Stack } from '@mui/material';
+import {
+  Typography,
+  TextField,
+  Button,
+  Stack,
+  Alert,
+  Collapse,
+} from '@mui/material';
+import { setUser, logout } from '../../../features/auth/authSlice';
+import { sendRequest } from '../../../../API/apihelper';
+import { useDispatch } from 'react-redux';
 
-export const Register = () => {
+export const Login = () => {
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: '',
   });
+
+  const dispatch = useDispatch();
+
+  const [error, setError] = useState();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -20,10 +33,28 @@ export const Register = () => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     setFormData({
-      username: '',
       email: '',
       password: '',
     });
+
+    const data = {
+      email: formData.email,
+      password: formData.password,
+    };
+
+    (async () => {
+      const res = await sendRequest('/api/auth/login', data, 'POST');
+      if (res?.error) {
+        setError({ errorMsg: res.error, errorStatus: res.errorStatus });
+      }
+      // console.log(res);
+      const user = {
+        token: res.token,
+        isAuthenticated: true,
+      };
+      console.log(user);
+      dispatch(setUser(user));
+    })();
   };
 
   return (
@@ -33,7 +64,13 @@ export const Register = () => {
       alignItems='center'
       spacing={4}
     >
-      <Typography variant='h4'>Register</Typography>
+      <Collapse in={error === true}>
+        <Alert severity='error'>Incorrect Password</Alert>
+      </Collapse>
+      <Collapse in={error === false}>
+        <Alert severity='success'>Password Is Correct</Alert>
+      </Collapse>
+      <Typography variant='h4'>Login</Typography>
       <form onSubmit={handleSubmit}>
         <Stack
           direction='column'
@@ -59,17 +96,8 @@ export const Register = () => {
             onChange={handleInputChange}
             required
           />
-          <TextField
-            label='Password'
-            variant='outlined'
-            name='password'
-            type='password'
-            value={formData.password}
-            onChange={handleInputChange}
-            required
-          />
           <Button type='submit' variant='contained' color='primary'>
-            Register
+            Login
           </Button>
         </Stack>
       </form>

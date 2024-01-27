@@ -1,12 +1,15 @@
+// index.js
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Login } from './components/Login.jsx';
-import { Register } from './components/Register.jsx';
+import { Login } from './components/Auth/Login/Login.jsx';
+import { Register } from './components/Auth/Regsiter/Register.jsx'; // Correct the typo in the import
 import { QueryClientProvider, QueryClient } from 'react-query';
-import { Provider } from 'react-redux'; // Correct import for Provider
+import { Provider } from 'react-redux';
 import LayoutMenu from './components/Layout.jsx';
-import { store } from './App/store.js';
+import MusicPlayer from './components/Player/Player.jsx';
+import { store } from './components/App/store.js';
+import Dashboard from './components/Dashboard/Dashboard.jsx';
 
 import './App.css';
 import './index.css';
@@ -25,6 +28,10 @@ const router = createBrowserRouter([
         element: <Login />,
       },
     ],
+  },
+  {
+    path: '/dashboard',
+    element: <Dashboard />,
   },
 ]);
 

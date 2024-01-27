@@ -1,4 +1,4 @@
-const baseUrl = '127.0.0.1:3000';
+const baseUrl = 'https://musicplayerapi.onrender.com';
 
 const headers = {
     'Content-Type': 'application/json',
@@ -15,10 +15,10 @@ export const sendRequest = async (path, data, method) => {
         if (!response.ok) {
             throw new Error(`Request failed with status ${response.status}`);
         }
-        return response;
+        const jsonResponse = await response.json();
+        return jsonResponse;
     } catch (error) {
-        console.log("true");
         console.error(error.message);
-        return true
+        return error
     }
 };

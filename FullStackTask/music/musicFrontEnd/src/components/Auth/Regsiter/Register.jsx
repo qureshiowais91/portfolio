@@ -1,24 +1,13 @@
 import React, { useState } from 'react';
-import {
-  Typography,
-  TextField,
-  Button,
-  Stack,
-  Alert,
-  Collapse,
-} from '@mui/material';
-import { setUser, logout } from '../features/auth/authSlice';
-import { sendRequest } from '../../API/apihelper';
-import { useDispatch } from 'react-redux';
+import { Typography, TextField, Button, Stack } from '@mui/material';
+import { sendRequest } from '../../../../API/apihelper';
 
-export const Login = () => {
+export const Register = () => {
   const [formData, setFormData] = useState({
+    username: '',
     email: '',
     password: '',
   });
-  const dispatch = useDispatch();
-
-  const [error, setError] = useState();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -42,8 +31,8 @@ export const Login = () => {
     };
 
     (async () => {
-      const res = await sendRequest('/login', data, 'POST');
-      console.log(res)
+      const res = await sendRequest('/api/auth/register', data, 'POST');
+      console.log(res);
       // dispatch(setUser(res));
     })();
   };
@@ -55,13 +44,7 @@ export const Login = () => {
       alignItems='center'
       spacing={4}
     >
-      <Collapse in={error === true}>
-        <Alert severity='error'>Incorrect Password</Alert>
-      </Collapse>
-      <Collapse in={error === false}>
-        <Alert severity='success'>Password Is Correct</Alert>
-      </Collapse>
-      <Typography variant='h4'>Login</Typography>
+      <Typography variant='h4'>Register</Typography>
       <form onSubmit={handleSubmit}>
         <Stack
           direction='column'
@@ -87,8 +70,17 @@ export const Login = () => {
             onChange={handleInputChange}
             required
           />
+          <TextField
+            label='Password'
+            variant='outlined'
+            name='password'
+            type='password'
+            value={formData.password}
+            onChange={handleInputChange}
+            required
+          />
           <Button type='submit' variant='contained' color='primary'>
-            Login
+            Register
           </Button>
         </Stack>
       </form>
