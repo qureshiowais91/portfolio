@@ -10,8 +10,14 @@ const GenreTag = ({ genre }) => {
     margin:'2rem'
   };
 
+
+  const handlerGenre = (e) => {
+    e.preventDefault();
+    console.log(e.target.value)
+  };
+
   return (
-    <Button variant='contained' style={buttonStyle}>
+    <Button value={genre} onClick={handlerGenre} variant='contained' style={buttonStyle}>
       {genre}
     </Button>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Paper, Grid } from '@mui/material';
 import MusicPlayer from '../Player/Player';
 import SongList from '../SongList/SongList';
@@ -6,6 +6,8 @@ import GenreTag from '../Genre/Genre';
 import Divider from '@mui/material/Divider';
 
 const Dashboard = () => {
+  const [genress, setGenres] = useState();
+
   const genres = [
     { id: 1, name: 'Rock' },
     { id: 2, name: 'Pop' },
