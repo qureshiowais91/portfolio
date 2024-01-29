@@ -21,7 +21,6 @@ function generateRandomToken(length) {
 
     return token;
 }
-const tokenLength = 20; // Adjust the length as needed
 
 app.get("/check-email", async (req, res) => {
     try {

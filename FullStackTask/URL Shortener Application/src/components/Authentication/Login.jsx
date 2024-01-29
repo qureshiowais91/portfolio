@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
-import { Typography, TextField, Button, Stack } from '@mui/material';
-import { useParams } from 'react-router-dom';
-import { instance } from '../apiEndpoints';
+import {
+  Typography,
+  TextField,
+  Button,
+  Stack,
+  Alert,
+  Collapse,
+} from '@mui/material';
+import { instance } from '../../apiEndpoints';
 
-export const ResetPassword = () => {
+export const Login = () => {
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: '',
   });
 
-  const { token } = useParams();
-  console.log(token);
+  const [login, setLogin] = useState('');
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -29,11 +34,16 @@ export const ResetPassword = () => {
     });
 
     const data = {
-      userEmail: formData.email,
+      email: formData.email,
       password: formData.password,
-      token: token,
     };
-    instance.post('/validate-token', data);
+
+    instance.post('/login', data).then((res) => {
+      const value = res?.data?.status === true ? true : false;
+
+      console.log(value);
+      setLogin(value);
+    });
   };
 
   return (
@@ -43,7 +53,13 @@ export const ResetPassword = () => {
       alignItems='center'
       spacing={4}
     >
-      <Typography variant='h4'>Reset Password</Typography>
+      <Collapse in={login === false}>
+        <Alert severity='error'>Incorrect Password</Alert>
+      </Collapse>
+      <Collapse in={login === true}>
+        <Alert severity='success'>Password Is Correct</Alert>
+      </Collapse>
+      <Typography variant='h4'>Login</Typography>
       <form onSubmit={handleSubmit}>
         <Stack
           direction='column'
@@ -70,7 +86,7 @@ export const ResetPassword = () => {
             required
           />
           <Button type='submit' variant='contained' color='primary'>
-            Register
+            Login
           </Button>
         </Stack>
       </form>

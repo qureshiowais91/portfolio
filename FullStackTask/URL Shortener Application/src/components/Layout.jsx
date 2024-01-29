@@ -3,14 +3,13 @@ import { NavLink } from 'react-router-dom';
 import {
   AppBar,
   Button,
-  CssBaseline,
   ButtonGroup,
   Divider,
   Toolbar,
-  Typography,
 } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import makeStyles from '@emotion/styled';
+
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -46,12 +45,12 @@ const LayoutMenu = () => {
             variant='middle'
             className={classes.divider}
           />
-          <ButtonGroup variant='outlined' aria-label=' primary button group'>
+          <ButtonGroup variant='outlined' aria-label='primary button group'>
             <Button>
-              <NavLink to='/login'>Login</NavLink>
+              <NavLink to='/'>Login</NavLink>
             </Button>
             <Button>
-              <NavLink to='/sendLink'>Reset Password</NavLink>
+              <NavLink to='/forgotpassword'>Forgot Password</NavLink>
             </Button>
             <Button>
               <NavLink to='/register'>Register</NavLink>

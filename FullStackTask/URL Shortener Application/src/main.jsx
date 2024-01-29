@@ -1,15 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { SendLink } from './components/SendResetLink.jsx';
-import { Login } from './components/Login.jsx';
-import { Register } from './components/Register.jsx';
-import { ResetPassword } from './components/ResetPassword.jsx';
+import { Login } from './components/Authentication/Login.jsx';
+import { Register } from './components/Authentication/Register.jsx';
 import { QueryClientProvider, QueryClient } from 'react-query';
 import LayoutMenu from './components/Layout.jsx';
+import { Forgotpassword } from './components/Authentication/ForgotPassword.jsx';
+import { Dashboard } from './components/Dashboard/Dashboard.jsx';
+import { UserProfilePage } from './components/User/User.jsx';
 
 import './App.css';
 import './index.css';
+import { URLShortener } from './components/Dashboard/URLShortenerForm.jsx';
+import { URLTable } from './components/Dashboard/URLTable.jsx';
 
 const router = createBrowserRouter([
   {
@@ -17,20 +20,34 @@ const router = createBrowserRouter([
     element: <LayoutMenu />,
     children: [
       {
-        path: '/sendLink',
-        element: <SendLink />,
-      },
-      {
         path: '/register',
         element: <Register />,
       },
       {
-        path: '/login',
+        path: '/',
         element: <Login />,
       },
       {
-        path: '/resetPassword/:token',
-        element: <ResetPassword />
+        path: '/forgotpassword',
+        element: <Forgotpassword />,
+      },
+    ],
+  },
+  {
+    path: '/dashboard',
+    element: <Dashboard />,
+    children: [
+      {
+        path: '/dashboard/profile',
+        element: <UserProfilePage />,
+      },
+      {
+        path: '/dashboard',
+        element: <URLShortener />,
+      },
+      {
+        path: '/dashboard/urllist',
+        element: <URLTable />,
       },
     ],
   },
