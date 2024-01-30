@@ -9,10 +9,11 @@ import { Forgotpassword } from './components/Authentication/ForgotPassword.jsx';
 import { Dashboard } from './components/Dashboard/Dashboard.jsx';
 import { UserProfilePage } from './components/User/User.jsx';
 
-import './App.css';
-import './index.css';
 import { URLShortener } from './components/Dashboard/URLShortenerForm.jsx';
 import { URLTable } from './components/Dashboard/URLTable.jsx';
+
+import './App.css';
+import './index.css';
 
 const router = createBrowserRouter([
   {
