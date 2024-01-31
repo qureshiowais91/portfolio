@@ -65,16 +65,24 @@ async function loginUser(req, res) {
   res.status(200).json({ message: 'User logged in successfully', userLoggedInEvent });
 }
 
-// async function forgotPassword() {
-//   const { username } = req.body;
-//   const ForgotPasswordEvent = {
-//     eventType: USER_EVENTS.FORGOT_PASSWORD_REQUESTED,
-//     eventData: { username }
-//   }
+async function passwordReset(req, res, next) {
+  const { username, password } = req.body;
 
+  const salt = await bcy.genSalt(10);
+  const encryptedPassword = await bcy.hash(password, salt);
 
+  const filter = { username: username };
+  const update = { encryptedPassword: encryptedPassword }
 
-// }
+  const userData = await User.findOneAndUpdate(filter, update, { new: true });
+
+  const PasswordResetEvent = {
+    eventType: USER_EVENTS.PASSWORD_RESET,
+    eventData: { userData }
+  }
+
+  res.status(200).json({ message: 'Password Reset', PasswordResetEvent });
+}
 
 async function activateAccount(req, res) {
   const { activationToken } = req.body;
@@ -97,5 +105,6 @@ async function activateAccount(req, res) {
 module.exports = {
   loginUser,
   registerUser,
-  activateAccount
+  activateAccount,
+  passwordReset
 };
