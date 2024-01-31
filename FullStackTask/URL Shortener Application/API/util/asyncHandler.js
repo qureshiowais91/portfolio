@@ -1,4 +1,4 @@
-function asynHandler(callback) {
+function asyncHandler(callback) {
     return async (req, res, next) => {
         try {
             await callback(req, res, next);
@@ -7,4 +7,4 @@ function asynHandler(callback) {
         }
     }
 }
-module.exports = { asynHandler }
+module.exports = { asyncHandler }
