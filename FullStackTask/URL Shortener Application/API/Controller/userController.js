@@ -61,11 +61,19 @@ async function loginUser(req, res) {
   res.status(200).json({ message: 'User logged in successfully', userLoggedInEvent });
 }
 
+async function activateAccount(req, res) {
+  const { activationToken } = req.body;
+  
+  const filter = { activationToken: activationToken };
+  const update = { activationToken: true };
 
+  const userAccount = await User.findOneAndUpdate(filter, update, { new: true });
+  res.status(200).json({ message: 'User Account Activated', userAccount })
+}
 
 
 module.exports = {
   loginUser,
   registerUser,
-
+  activateAccount
 };
