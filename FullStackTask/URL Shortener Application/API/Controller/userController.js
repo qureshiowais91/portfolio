@@ -11,18 +11,16 @@ async function registerUser(req, res) {
 
   const salt = await bcy.genSalt(10);
   const encryptedPassword = await bcy.hash(password, salt);
+  const activationToken = generateRandomCode();
 
   const userRegisteredEvent = {
     eventType: USER_EVENTS.USER_REGISTERED,
-    eventData: { username, firstName, lastName, encryptedPassword }
+    eventData: { username, firstName, lastName, encryptedPassword, activationToken }
   };
 
   const userCreated = await User.create(userRegisteredEvent["eventData"]);
   res.status(201).json({ message: 'User registered successfully', userCreated });
 
-  const activationToken = generateRandomCode();
-
-  const email = req.body.email
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -33,15 +31,13 @@ async function registerUser(req, res) {
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: email,
-    subject: 'Password Reset',
-    html: `${activationToken}`,
+    to: userRegisteredEvent.eventData.username,
+    subject: 'Activation Code',
+    html: `127.0.0.1/account/${userRegisteredEvent.eventData.activationToken}`,
   };
 
   const info = await transporter.sendMail(mailOptions);
-  
   console.log("Message sent: %s", info.messageId);
-
 }
 
 async function loginUser(req, res) {

@@ -7,9 +7,8 @@ require('dotenv').config()
 const app = express();
 const port = 3001;
 
-dbConnect()
+dbConnect();
 app.use(express.json());
-
 app.use('/user', userRoutes);
 app.use(errorHandler);
 

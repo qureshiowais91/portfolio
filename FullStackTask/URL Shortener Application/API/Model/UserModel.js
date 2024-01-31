@@ -6,7 +6,7 @@ const userSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   encryptedPassword: { type: String, required: true },
-  activeAccount: { type: Boolean, required: true },
+  activationToken: { type: String, required: false },
 });
 
 module.exports = mongoose.model('User', userSchema);
