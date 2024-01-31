@@ -1,60 +1,75 @@
-// const Redis = require('ioredis');
-// const redis = new Redis();
-// const argon2 = require('argon2');
+const { Errorhandler } = require("../util/ErrorHandle");
+const { USER_EVENTS, URL_EVENTS } = require("../Event/EventTypes");
+const { generateAccessToken } = require("../util/signToken");
+const User = require("../Model/UserModel");
+const bcy = require("bcryptjs");
+const { generateRandomCode } = require("../util/genrateRandome")
+const nodemailer = require("nodemailer");
 
-
-// // User Registration 
 async function registerUser(req, res) {
-  // Perform registration logic
-  const { username, firstName, lastName, password, activationToken } = req.body;
+  const { username, firstName, lastName, password } = req.body;
 
-  // Publish UserRegistered event
+  const salt = await bcy.genSalt(10);
+  const encryptedPassword = await bcy.hash(password, salt);
+
   const userRegisteredEvent = {
-    eventType: 'UserRegistered',
-    eventData: { username, firstName, lastName, password, activationToken }
+    eventType: USER_EVENTS.USER_REGISTERED,
+    eventData: { username, firstName, lastName, encryptedPassword }
   };
 
-  await publishEvent('userEvent', userRegisteredEvent);
-  res.json({ message: 'User registered successfully' });
+  const userCreated = await User.create(userRegisteredEvent["eventData"]);
+  res.status(201).json({ message: 'User registered successfully', userCreated });
+
+  const activationToken = generateRandomCode();
+
+  const email = req.body.email
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.APP_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Password Reset',
+    html: `${activationToken}`,
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  
+  console.log("Message sent: %s", info.messageId);
+
 }
 
 async function loginUser(req, res) {
-  // Perform login logic
-  // const { username } = req.body;
-  // const userLoggedInEvent = {
-  //   eventType: 'UserLoggedIn',
-  //   eventData: { username },
-  // };
-  // await publishEvent('userEvent', userLoggedInEvent);
-  res.json({ message: 'User logged in successfully' });
+  const { username, password } = req.body;
+
+  const userData = await User.find({ username });
+
+  const match = await bcy.compare(password, userData[0].encryptedPassword);
+
+  if (!match) {
+    throw new Errorhandler(USER_EVENTS.LOGIN_ATTEMPT_FAILED, "Email And Password Does Not Match", 200)
+  }
+
+  const token = generateAccessToken(userData);
+
+  const userLoggedInEvent = {
+    eventType: USER_EVENTS.USER_LOGGED_IN,
+    eventData: { token }
+  };
+
+  res.status(200).json({ message: 'User logged in successfully', userLoggedInEvent });
 }
 
-// // Account Activation
-// async function activateAccount(req, res) {
-//   // Perform account activation logic
-//   const { activationToken } = req.params;
 
-//   // Publish AccountActivated event
-//   const accountActivatedEvent = {
-//     eventType: 'AccountActivated',
-//     eventData: { activationToken },
-//   };
-//   await publishEvent('userEvent', accountActivatedEvent);
 
-//   res.json({ message: 'Account activated successfully' });
-// }
-
-// // User Login
-
-// // ... Other user-related controller functions
-
-// // Helper function to publish events to Redis
-async function publishEvent(channel, event) {
-  const message = JSON.stringify(event);
-  await redis.publish(channel, message);
-}
 
 module.exports = {
   loginUser,
-  registerUser
+  registerUser,
+
 };
