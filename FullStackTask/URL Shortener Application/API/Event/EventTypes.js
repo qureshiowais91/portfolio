@@ -4,7 +4,6 @@ const USER_EVENTS = {
     USER_LOGGED_IN: 'UserLoggedIn',
     ACCOUNT_ACTIVATION_FAILED: 'AccountActivationFailed',
     LOGIN_ATTEMPT_FAILED: 'LoginAttemptFailed',
-    FORGOT_PASSWORD_REQUESTED: 'ForgotPasswordRequested',
     PASSWORD_RESET: 'PasswordReset',
 };
 
