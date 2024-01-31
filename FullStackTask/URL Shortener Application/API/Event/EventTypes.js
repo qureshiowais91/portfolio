@@ -1,4 +1,4 @@
-export const USER_EVENTS = {
+const USER_EVENTS = {
     USER_REGISTERED: 'UserRegistered',
     ACCOUNT_ACTIVATED: 'AccountActivated',
     USER_LOGGED_IN: 'UserLoggedIn',
@@ -7,7 +7,10 @@ export const USER_EVENTS = {
     PASSWORD_RESET: 'PasswordReset',
 };
 
-export const URL_EVENTS = {
+const URL_EVENTS = {
     URL_CREATED: 'URLCreated',
     URL_CLICKED: 'URLClicked',
 };
+
+
+module.exports={USER_EVENTS,URL_EVENTS}
