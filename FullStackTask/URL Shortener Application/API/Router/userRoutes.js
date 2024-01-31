@@ -4,7 +4,7 @@ const { asynHandler } = require("../util/asyncHandler");
 const { loginUser,registerUser } = require('../Controller/userController');
 
 // User Registration Endpoint
-router.post('/register', registerUser);
+router.post('/register', asynHandler(registerUser));
 
 // Account Activation Endpoint
 // router.get('/activate/:activationToken', activateAccount);
