@@ -8,6 +8,7 @@ const app = express();
 const port = 3001;
 
 dbConnect();
+
 app.use(express.json());
 app.use('/user', userRoutes);
 app.use(errorHandler);
