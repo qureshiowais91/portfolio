@@ -1,5 +1,5 @@
 const { Errorhandler } = require("../util/ErrorHandle");
-const { USER_EVENTS, URL_EVENTS } = require("../Event/EventTypes");
+const { USER_EVENTS } = require("../Event/EventTypes");
 const { generateAccessToken } = require("../util/signToken");
 const User = require("../Model/UserModel");
 const bcy = require("bcryptjs");
@@ -19,7 +19,7 @@ async function registerUser(req, res) {
   };
 
   const userCreated = await User.create(userRegisteredEvent["eventData"]);
-  res.status(201).json({ message: 'User registered successfully', userCreated });
+  res.status(201).json({ message: 'User registered successfully', userRegisteredEvent });
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
