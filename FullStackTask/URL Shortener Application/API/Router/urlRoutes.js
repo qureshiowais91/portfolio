@@ -6,6 +6,7 @@ const { asyncHandler } = require("../util/asyncHandler");
 const {
     createShortURL,
     clickShortURL,
+    clickCount
 } = require("../Controller/urlController");
 
 // URL Creation Endpoint
@@ -13,5 +14,6 @@ router.post('/create-url', asyncHandler(createShortURL));
 
 // URL Clicked Endpoint
 router.get('/click', asyncHandler(clickShortURL));
+router.get('/analytics', asyncHandler(clickCount));
 
 module.exports = router;

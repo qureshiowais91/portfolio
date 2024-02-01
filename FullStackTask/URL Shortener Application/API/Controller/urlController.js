@@ -15,7 +15,7 @@ async function createShortURL(req, res) {
     }
 
     const urlId = generateRandomCode();
-    const shortURL = `localhost:5173/short/${urlId}`
+    const shortURL = `${process.env.FRONTEND_URL}${urlId}`;
 
     const urlCreatedEvent = {
         eventType: URL_EVENTS.URL_CREATED,
@@ -47,8 +47,7 @@ async function clickShortURL(req, res) {
     if (!userExists) {
         throw new Errorhandler(URL_EVENTS.SHORT_URL_CLICKED, "User not found", 404);
     }
-
-    const shortURL = `localhost:5173/short/${urlId}`;
+    const shortURL = `${process.env.FRONTEND_URL}${urlId}`;
 
     const filter = { shortURL: shortURL }
 
@@ -68,7 +67,26 @@ async function clickShortURL(req, res) {
     res.status(200).json({ message: 'URL clicked successfully', urlClickedEvent });
 }
 
+
+async function clickCount(req, res, next) {
+    const { userId,urlId } = req.query;
+
+    const userExists = await User.findById(userId);
+
+    if (!userExists) {
+        throw new Errorhandler(URL_EVENTS.SHORT_URL_CLICKED, "User not found", 404);
+    }
+
+    const shortURL = `${process.env.FRONTEND_URL}${urlId}`;
+    const URLData = await URL.find({creator:userId,shortURL:shortURL});
+
+    // const URLData = await URL.find({ creator: userId,shortURL:});
+    res.status(200).json({ message: 'URL clicked successfully', URLData });
+}
+
+
 module.exports = {
     createShortURL,
     clickShortURL,
+    clickCount
 };
