@@ -9,7 +9,7 @@ const USER_EVENTS = {
 
 const URL_EVENTS = {
     URL_CREATED: 'URLCreated',
-    URL_CLICKED: 'URLClicked',
+    SHORT_URL_CLICKED: 'ShortURLClicked',
 };
 
 

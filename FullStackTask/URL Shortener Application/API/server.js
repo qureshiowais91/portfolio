@@ -1,5 +1,7 @@
 const express = require('express');
 const userRoutes = require('./Router/userRoutes');
+const urlRoutes = require('./Router/urlRoutes');
+
 const errorHandler = require("./Middleware/error");
 const { dbConnect } = require("./util/dbConnect")
 require('dotenv').config()
@@ -11,6 +13,7 @@ dbConnect();
 
 app.use(express.json());
 app.use('/user', userRoutes);
+app.use('/url', urlRoutes);
 app.use(errorHandler);
 
 app.listen(port, () => {
