@@ -4,7 +4,7 @@ const urlRoutes = require('./Router/urlRoutes');
 
 const errorHandler = require("./Middleware/error");
 const { dbConnect } = require("./util/dbConnect");
-const { cors } = require("cors")
+const cors = require("cors")
 require('dotenv').config()
 
 const app = express();
