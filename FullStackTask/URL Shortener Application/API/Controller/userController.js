@@ -59,7 +59,7 @@ async function loginUser(req, res) {
 
   const userLoggedInEvent = {
     eventType: USER_EVENTS.USER_LOGGED_IN,
-    eventData: { token }
+    eventData: token
   };
 
   res.status(200).json({ message: 'User logged in successfully', userLoggedInEvent });
