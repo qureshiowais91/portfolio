@@ -6,6 +6,7 @@ const bcy = require("bcryptjs");
 const { generateRandomCode } = require("../util/genrateRandome")
 const nodemailer = require("nodemailer");
 
+
 async function registerUser(req, res) {
   const { username, firstName, lastName, password } = req.body;
 
@@ -103,7 +104,8 @@ async function activateAccount(req, res) {
 
 
 async function profile(req, res) {
-  const { id } = req.query;
+  const { token } = req.user;
+  console.log(token)
 
   if (!id) {
     throw new Errorhandler(USER_EVENTS.ACCOUNT_DETAILS_REQUESTED, "Account Id Needed", 304);
