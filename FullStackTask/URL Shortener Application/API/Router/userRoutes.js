@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { asyncHandler } = require("../util/asyncHandler");
 const { loginUser, registerUser, activateAccount, passwordReset, profile } = require('../Controller/userController');
-const { auth } = require("../Middleware/auth")
+                                                                                       const { auth } = require("../Middleware/auth")
 
 // User Registration Endpoint
 router.post('/register', asyncHandler(registerUser));

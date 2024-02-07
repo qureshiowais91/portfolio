@@ -9,7 +9,6 @@ async function createShortURL(req, res) {
 
     // Validate user existence based on userId (you may need to customize this validation)
     const userExists = await User.findById(userId);
-    console.log(userExists)
     if (!userExists) {
         throw new Errorhandler(URL_EVENTS.URL_CREATION_FAILED, "User not found", 404);
     }

@@ -45,7 +45,6 @@ async function loginUser(req, res) {
   const { username, password } = req.body;
 
   const userData = await User.find({ username });
-  console.log(userData)
   if (!(userData[0].activationToken === 'true')) {
     throw new Errorhandler(USER_EVENTS.LOGIN_ATTEMPT_FAILED, "Account Not Activated Check Your Inbox", 200)
   }
@@ -55,9 +54,8 @@ async function loginUser(req, res) {
   if (!match) {
     throw new Errorhandler(USER_EVENTS.LOGIN_ATTEMPT_FAILED, "Email And Password Does Not Match", 200)
   }
-
-  const token = generateAccessToken(userData);
-
+  const token = generateAccessToken(userData[0]);
+  
   const userLoggedInEvent = {
     eventType: USER_EVENTS.USER_LOGGED_IN,
     eventData: token
@@ -104,14 +102,13 @@ async function activateAccount(req, res) {
 
 
 async function profile(req, res) {
-  const { token } = req.user;
-  console.log(token)
-
-  if (!id) {
+  const user = req.user;
+  console.log(user)
+  if (!user.id) {
     throw new Errorhandler(USER_EVENTS.ACCOUNT_DETAILS_REQUESTED, "Account Id Needed", 304);
   }
 
-  const userAccount = await User.findById(id);
+  const userAccount = await User.findById(user.id);
 
   if (!userAccount) { throw new Errorhandler(USER_EVENTS.ACCOUNT_DETAILS_REQUESTED, "Account Not Found", 404) }
 
