@@ -5,6 +5,7 @@ const USER_EVENTS = {
     ACCOUNT_ACTIVATION_FAILED: 'AccountActivationFailed',
     LOGIN_ATTEMPT_FAILED: 'LoginAttemptFailed',
     PASSWORD_RESET: 'PasswordReset',
+    ACCOUNT_DETAILS_REQUESTED: 'AccountDetailsRequested' // Event for requesting account details
 };
 
 const URL_EVENTS = {
@@ -12,6 +13,5 @@ const URL_EVENTS = {
     URL_CREATION_FAILED:'URLCreationFailed',
     SHORT_URL_CLICKED: 'ShortURLClicked',
 };
-
 
 module.exports={USER_EVENTS,URL_EVENTS}

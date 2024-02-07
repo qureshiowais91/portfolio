@@ -102,9 +102,25 @@ async function activateAccount(req, res) {
 }
 
 
+async function profile(req, res) {
+  const { id } = req.query;
+
+  if (!id) {
+    throw new Errorhandler(USER_EVENTS.ACCOUNT_DETAILS_REQUESTED, "Account Id Needed", 304);
+  }
+
+  const userAccount =await User.findById(id);
+
+  if (!userAccount) { throw new Errorhandler(USER_EVENTS.ACCOUNT_DETAILS_REQUESTED, "Account Not Found", 404) }
+
+  res.status(200).json({ message: 'User Account Found', userAccount })
+
+}
+
 module.exports = {
   loginUser,
   registerUser,
   activateAccount,
-  passwordReset
+  passwordReset,
+  profile
 };
