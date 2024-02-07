@@ -109,12 +109,11 @@ async function profile(req, res) {
     throw new Errorhandler(USER_EVENTS.ACCOUNT_DETAILS_REQUESTED, "Account Id Needed", 304);
   }
 
-  const userAccount =await User.findById(id);
+  const userAccount = await User.findById(id);
 
   if (!userAccount) { throw new Errorhandler(USER_EVENTS.ACCOUNT_DETAILS_REQUESTED, "Account Not Found", 404) }
 
-  res.status(200).json({ message: 'User Account Found', userAccount })
-
+  res.status(200).json({ message: 'User Account Found', userAccount });
 }
 
 module.exports = {
