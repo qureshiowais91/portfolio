@@ -7,6 +7,11 @@ const { generateRandomCode } = require("../util/genrateRandome")
 async function createShortURL(req, res) {
     const { longURL } = req.body;
     const  userId = req.user.id;
+
+    if(!longURL){
+        throw new Errorhandler(URL_EVENTS.URL_CREATION_FAILED, "Long URL not found", 404);
+    }
+
     // Validate user existence based on userId (you may need to customize this validation)
     const userExists = await User.findById(userId);
     if (!userExists) {
@@ -39,13 +44,8 @@ async function createShortURL(req, res) {
 }
 
 async function clickShortURL(req, res) {
-    const { userId, urlId } = req.query;
+    const { urlId } = req.query;
 
-    // Validate user existence based on userId (you may need to customize this validation)
-    const userExists = await User.findById(userId);
-    if (!userExists) {
-        throw new Errorhandler(URL_EVENTS.SHORT_URL_CLICKED, "User not found", 404);
-    }
     const shortURL = `${process.env.FRONTEND_URL}${urlId}`;
 
     const filter = { shortURL: shortURL }
