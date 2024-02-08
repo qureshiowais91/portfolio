@@ -5,8 +5,8 @@ const URL = require("../Model/URLModel");
 const { generateRandomCode } = require("../util/genrateRandome")
 
 async function createShortURL(req, res) {
-    const { userId, longURL } = req.body;
-
+    const { longURL } = req.body;
+    const  userId = req.user.id;
     // Validate user existence based on userId (you may need to customize this validation)
     const userExists = await User.findById(userId);
     if (!userExists) {
@@ -15,7 +15,7 @@ async function createShortURL(req, res) {
 
     const urlId = generateRandomCode();
     const shortURL = `${process.env.FRONTEND_URL}${urlId}`;
-
+    console.log(shortURL)
     const urlCreatedEvent = {
         eventType: URL_EVENTS.URL_CREATED,
         eventData: { longURL, shortURL, userId }
@@ -68,7 +68,7 @@ async function clickShortURL(req, res) {
 
 
 async function clickCount(req, res, next) {
-    const { userId,urlId } = req.query;
+    const { userId, urlId } = req.query;
 
     const userExists = await User.findById(userId);
 
@@ -77,7 +77,7 @@ async function clickCount(req, res, next) {
     }
 
     const shortURL = `${process.env.FRONTEND_URL}${urlId}`;
-    const URLData = await URL.find({creator:userId,shortURL:shortURL});
+    const URLData = await URL.find({ creator: userId, shortURL: shortURL });
 
     // const URLData = await URL.find({ creator: userId,shortURL:});
     res.status(200).json({ message: 'URL clicked successfully', URLData });
