@@ -6,9 +6,10 @@ const { generateRandomCode } = require("../util/genrateRandome")
 
 async function createShortURL(req, res) {
     const { longURL } = req.body;
-    const  userId = req.user.id;
+    const userId = req.body.id;
+    // console.log(req)
 
-    if(!longURL){
+    if (!longURL) {
         throw new Errorhandler(URL_EVENTS.URL_CREATION_FAILED, "Long URL not found", 404);
     }
 
@@ -20,7 +21,6 @@ async function createShortURL(req, res) {
 
     const urlId = generateRandomCode();
     const shortURL = `${process.env.FRONTEND_URL}${urlId}`;
-    console.log(shortURL)
     const urlCreatedEvent = {
         eventType: URL_EVENTS.URL_CREATED,
         eventData: { longURL, shortURL, userId }
@@ -32,7 +32,6 @@ async function createShortURL(req, res) {
         shortURL: urlCreatedEvent["eventData"].shortURL,
         creator: urlCreatedEvent["eventData"].userId
     }
-
     const urlData = await URL.create(createURL);
 
     if (!urlData) {
