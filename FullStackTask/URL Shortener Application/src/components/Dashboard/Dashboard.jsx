@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -8,14 +8,14 @@ import {
   MenuItem,
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { URLTable } from './URLTable';
-import { Container } from '@mui/material';
-import { URLShortener } from './URLShortenerForm';
 import Avatar from '@mui/material/Avatar';
 import { Outlet } from 'react-router-dom';
+import { getJWTToken } from '../../util/authUtils';
+import { API } from '../../API';
+
 export const Dashboard = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-
+  const [profile, setProfile] = useState(null);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -23,6 +23,38 @@ export const Dashboard = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const fetchUserProfile = async (token) => {
+    try {
+      console.log(API.USER_URL);
+      const response = await fetch(`${API.USER_URL}/profile`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch user profile');
+      }
+      const data = await response.json();
+      // console.log(data["userAccount"])
+      setProfile(data['userAccount']);
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+  };
+  
+  useEffect(() => {
+
+    (async () => {
+      const token = getJWTToken();
+      if (token) {
+        await fetchUserProfile(token);
+        console.log(profile);
+      }
+    })();
+
+  }, []);
 
   return (
     <>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Typography, TextField, Button, Container, Stack } from '@mui/material';
 
 export const Register = () => {
   const [formData, setFormData] = useState({
