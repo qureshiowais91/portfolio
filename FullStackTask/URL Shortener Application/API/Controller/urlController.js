@@ -43,22 +43,26 @@ async function createShortURL(req, res) {
 }
 
 async function clickShortURL(req, res) {
+    // console.log(req)
     const { urlId } = req.query;
-
+    console.log(urlId)
     const shortURL = `${process.env.FRONTEND_URL}${urlId}`;
-
+    console.log(shortURL)
     const filter = { shortURL: shortURL }
-
-    const URLData = await URL.find(filter);
-
-    const update = { clickCount: (URLData[0].clickCount + 1) }
+    console.log(filter);
+    const URLData = await URL.findOne(filter);
+    console.log(URLData)
+    if (!URLData) {
+        throw new Errorhandler(URL_EVENTS.SHORT_URL_CLICKED, "Server Error", 500);
+    }
+    const update = { clickCount: (URLData.clickCount + 1) }
 
     const updateURLData = await URL.updateOne(filter, update, { new: true })
 
     // Your URL click logic here
     const urlClickedEvent = {
         eventType: URL_EVENTS.SHORT_URL_CLICKED,
-        eventData: { updateURLData }
+        eventData: { URLData, updateURLData }
     };
 
     // Additional logic to handle URL click
