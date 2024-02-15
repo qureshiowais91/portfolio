@@ -43,15 +43,23 @@ async function createShortURL(req, res) {
 }
 
 async function clickShortURL(req, res) {
-    // console.log(req)
     const { urlId } = req.query;
-    console.log(urlId)
+
+    if (!urlId) {
+        throw new Errorhandler(URL_EVENTS.SHORT_URL_CLICKED, "Server Error", 500);
+    }
+
     const shortURL = `${process.env.FRONTEND_URL}${urlId}`;
-    console.log(shortURL)
+
+    if (!shortURL) {
+        throw new Errorhandler(URL_EVENTS.SHORT_URL_CLICKED, "Server Error", 500);
+    }
+
+    console.log(shortURL);
     const filter = { shortURL: shortURL }
-    console.log(filter);
+    // console.log(filter);
     const URLData = await URL.findOne(filter);
-    console.log(URLData)
+    // console.log(URLData);
     if (!URLData) {
         throw new Errorhandler(URL_EVENTS.SHORT_URL_CLICKED, "Server Error", 500);
     }
@@ -62,11 +70,13 @@ async function clickShortURL(req, res) {
     // Your URL click logic here
     const urlClickedEvent = {
         eventType: URL_EVENTS.SHORT_URL_CLICKED,
-        eventData: { URLData, updateURLData }
+        eventData: { URLData }
     };
 
+    res.redirect(URLData.longURL);
+
     // Additional logic to handle URL click
-    res.status(200).json({ message: 'URL clicked successfully', urlClickedEvent });
+    // res.status(200).json({ message: 'URL clicked successfully', URLData});
 }
 
 
