@@ -8,7 +8,7 @@ const nodemailer = require("nodemailer");
 
 
 async function registerUser(req, res) {
-  const { username, firstName, lastName, password } = req.body;
+  const { email, firstName, lastName, password } = req.body;
 
   const salt = await bcy.genSalt(10);
   const encryptedPassword = await bcy.hash(password, salt);
@@ -16,7 +16,7 @@ async function registerUser(req, res) {
 
   const userRegisteredEvent = {
     eventType: USER_EVENTS.USER_REGISTERED,
-    eventData: { username, firstName, lastName, encryptedPassword, activationToken }
+    eventData: { email, firstName, lastName, encryptedPassword, activationToken }
   };
 
   const userCreated = await User.create(userRegisteredEvent["eventData"]);
@@ -32,7 +32,7 @@ async function registerUser(req, res) {
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: userRegisteredEvent.eventData.username,
+    to: userRegisteredEvent.eventData.email,
     subject: 'Activation Code',
     html: `127.0.0.1/account/${userRegisteredEvent.eventData.activationToken}`,
   };
@@ -42,9 +42,9 @@ async function registerUser(req, res) {
 }
 
 async function loginUser(req, res) {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  const userData = await User.find({ username });
+  const userData = await User.find({ email });
   if (!(userData[0].activationToken === 'true')) {
     throw new Errorhandler(USER_EVENTS.LOGIN_ATTEMPT_FAILED, "Account Not Activated Check Your Inbox", 200)
   }
@@ -65,12 +65,12 @@ async function loginUser(req, res) {
 }
 
 async function passwordReset(req, res, next) {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   const salt = await bcy.genSalt(10);
   const encryptedPassword = await bcy.hash(password, salt);
 
-  const filter = { username: username };
+  const filter = { email: email };
   const update = { encryptedPassword: encryptedPassword }
 
   const userData = await User.findOneAndUpdate(filter, update, { new: true });
