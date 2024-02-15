@@ -16,6 +16,7 @@ import { API } from '../../API';
 export const Dashboard = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [profile, setProfile] = useState(null);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -26,7 +27,6 @@ export const Dashboard = () => {
 
   const fetchUserProfile = async (token) => {
     try {
-      console.log(API.USER_URL);
       const response = await fetch(`${API.USER_URL}/profile`, {
         method: 'GET',
         headers: {
@@ -37,15 +37,14 @@ export const Dashboard = () => {
         throw new Error('Failed to fetch user profile');
       }
       const data = await response.json();
-      // console.log(data["userAccount"])
+      
       setProfile(data['userAccount']);
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
   };
-  
-  useEffect(() => {
 
+  useEffect(() => {
     (async () => {
       const token = getJWTToken();
       if (token) {
@@ -53,7 +52,6 @@ export const Dashboard = () => {
         console.log(profile);
       }
     })();
-
   }, []);
 
   return (

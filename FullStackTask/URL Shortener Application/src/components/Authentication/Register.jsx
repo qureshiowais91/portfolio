@@ -1,4 +1,9 @@
 import React, { useState } from 'react';
+import {
+  TextField,
+  Button,
+  Stack
+} from '@mui/material';
 
 export const Register = () => {
   const [formData, setFormData] = useState({
