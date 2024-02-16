@@ -12,7 +12,6 @@ import { UserProfilePage } from './components/User/User.jsx';
 import { URLShortener } from './components/Dashboard/URLShortenerForm.jsx';
 import { URLTable } from './components/Dashboard/URLTable.jsx';
 
-import { RedirectComponent } from './components/Dashboard/Redirect.jsx';
 
 import './App.css';
 import './index.css';
@@ -33,10 +32,6 @@ const router = createBrowserRouter([
       {
         path: '/forgotpassword',
         element: <Forgotpassword />,
-      },
-      {
-        path: '/s',
-        element: <RedirectComponent />,
       },
     ],
   },

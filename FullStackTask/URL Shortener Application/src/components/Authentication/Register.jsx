@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import {
-  TextField,
-  Button,
-  Stack
-} from '@mui/material';
+import { API } from '../../API';
+import { TextField, Button, Stack, Typography } from '@mui/material';
 
 export const Register = () => {
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
+    firstName: '',
+    lastName: '',
     password: '',
   });
 
@@ -21,13 +19,24 @@ export const Register = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    setFormData({
-      username: '',
-      email: '',
-      password: '',
-    });
+    (async () => {
+      e.preventDefault();
+      setFormData({
+        email: '',
+        firstName: '',
+        lastName: '',
+        password: '',
+      });
+
+      await fetch(`${API.USER_URL}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        body: JSON.stringify(formData),
+      });
+    })();
   };
 
   return (
@@ -55,11 +64,18 @@ export const Register = () => {
             required
           />
           <TextField
-            label='Password'
+            label='First Name'
             variant='outlined'
-            name='password'
-            type='password'
-            value={formData.password}
+            name='firstName'
+            value={formData.firstName}
+            onChange={handleInputChange}
+            required
+          />
+          <TextField
+            label='Last Name'
+            variant='outlined'
+            name='lastName'
+            value={formData.lastName}
             onChange={handleInputChange}
             required
           />

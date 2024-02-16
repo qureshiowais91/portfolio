@@ -10,6 +10,7 @@ export const UserProfilePage = () => {
   return (
     <div>
       <h1>User Profile</h1>
+      <h1>Not in Task But I will add later so user can edit user detail</h1>
     </div>
   );
 };

@@ -7,7 +7,8 @@ const { auth } = require("../Middleware/auth")
 const {
     createShortURL,
     clickShortURL,
-    clickCount
+    clickCount,
+    getUrlList
 } = require("../Controller/urlController");
 
 // URL Creation Endpoint
@@ -15,6 +16,8 @@ router.post('/create-url', auth, asyncHandler(createShortURL));
 
 // URL Clicked Endpoint
 router.get('/click', asyncHandler(clickShortURL));
-router.get('/analytics', asyncHandler(clickCount));
+router.get('/analytics', auth, asyncHandler(clickCount));
+router.get('/getUrlList', auth, asyncHandler(getUrlList));
+
 
 module.exports = router;

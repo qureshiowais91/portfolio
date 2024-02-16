@@ -9,12 +9,12 @@ import {
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Avatar from '@mui/material/Avatar';
-import { Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import { getJWTToken } from '../../util/authUtils';
 import { API } from '../../API';
 
 export const Dashboard = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [profile, setProfile] = useState(null);
 
   const handleClick = (event) => {
@@ -37,8 +37,9 @@ export const Dashboard = () => {
         throw new Error('Failed to fetch user profile');
       }
       const data = await response.json();
-      
+
       setProfile(data['userAccount']);
+      console.log(profile);
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
@@ -49,7 +50,6 @@ export const Dashboard = () => {
       const token = getJWTToken();
       if (token) {
         await fetchUserProfile(token);
-        console.log(profile);
       }
     })();
   }, []);
@@ -78,9 +78,15 @@ export const Dashboard = () => {
                 horizontal: 'right',
               }}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
+              <NavLink to='/dashboard/profile'>
+                <MenuItem>Profile</MenuItem>
+              </NavLink>
+              <NavLink to='/dashboard/urllist'>
+                <MenuItem>List URL</MenuItem>
+              </NavLink>
+              <NavLink to='/'>
+                <MenuItem>Log Out</MenuItem>
+              </NavLink>
             </Menu>
           </div>
         </Toolbar>

@@ -1,23 +1,24 @@
 const jwt = require('jsonwebtoken');
+const { Errorhandler } = require("../util/ErrorHandle");
 
-function auth(req, res, next) {
+async function auth(req, res, next) {
 
     const authHeader = req.headers.authorization; // Assuming token is passed in the Authorization header
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ message: 'No token provided' });
+        throw new Errorhandler('No token provided', 304);
     }
-    
+
     const token = authHeader.substring(7); // Removing 'Bearer ' prefix from the token
 
-    jwt.verify(token, process.env.SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ message: 'Failed to authenticate token' });
-        }
-        req.body["id"] = decoded["id"];
+    const decode = await jwt.verify(token, process.env.SECRET);
+    if (!decode) {
+        throw new Errorhandler('Invalid Token', 304);
+    }
+    console.log("dd",decode);
+    req.body.id = decode["id"];
+    console.log(req.body);
 
-        next();
-    });
-
+    next();
 }
 
 

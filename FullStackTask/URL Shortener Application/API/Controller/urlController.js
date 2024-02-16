@@ -1,3 +1,9 @@
+/*
+ *  id = userId, only auth user id set and allow access in controller
+ * 
+ */
+
+
 const { Errorhandler } = require("../util/ErrorHandle");
 const { URL_EVENTS } = require("../Event/EventTypes");
 const User = require("../Model/UserModel");
@@ -97,8 +103,16 @@ async function clickCount(req, res, next) {
 }
 
 
+async function getUrlList(req, res, next) {
+    const { id } = req.body;
+    const UrlList = await URL.find({ creator: id }).select('longURL shortURL clickCount');
+    res.status(200).json({ message: 'Url List', UrlList });
+
+}
+
 module.exports = {
     createShortURL,
     clickShortURL,
-    clickCount
+    clickCount,
+    getUrlList
 };

@@ -5,12 +5,12 @@ import {
   Stack,
   Alert,
   Collapse,
-  CircularProgress
+  CircularProgress,
 } from '@mui/material';
-import useStore from '../../app/store'; 
+import useStore from '../../app/store';
 import { useMutation } from 'react-query';
 import { API } from '../../API';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
   const { login } = useStore();
@@ -53,7 +53,7 @@ export const Login = () => {
     {
       onSuccess: (data) => {
         login(data);
-        navigate("/dashboard");
+        navigate('/dashboard');
       },
       onError: (error) => {
         setIsLoading(false); // Set loading state to false on error
@@ -69,21 +69,21 @@ export const Login = () => {
 
   return (
     <Stack
-    direction='column'
-    justifyContent='center'
-    alignItems='center'
-    spacing={4}
-  >
-    <Collapse in={errorMessage !== ''}>
-      <Alert severity='error'>{errorMessage}</Alert>
-    </Collapse>
-    {isLoading ? ( // Show loading indicator when isLoading is true
-      <CircularProgress />
-    ) : (
-      <Collapse in={login === true}>
-        <Alert severity='success'>Password Is Correct</Alert>
+      direction='column'
+      justifyContent='center'
+      alignItems='center'
+      spacing={4}
+    >
+      <Collapse in={errorMessage !== ''}>
+        <Alert severity='error'>{errorMessage}</Alert>
       </Collapse>
-    )}
+      {isLoading ? ( // Show loading indicator when isLoading is true
+        <CircularProgress />
+      ) : (
+        <Collapse in={login === true}>
+          <Alert severity='success'>Password Is Correct</Alert>
+        </Collapse>
+      )}
       <form onSubmit={handleLogin}>
         <Stack
           direction='column'
