@@ -34,7 +34,7 @@ async function registerUser(req, res) {
     from: process.env.EMAIL_USER,
     to: userRegisteredEvent.eventData.email,
     subject: 'Activation Code',
-    html: `127.0.0.1/account/${userRegisteredEvent.eventData.activationToken}`,
+    html: `https://urlshort-65ao.onrender.com/user/activate?activationToken=${userRegisteredEvent.eventData.activationToken}`,
   };
 
   const info = await transporter.sendMail(mailOptions);
