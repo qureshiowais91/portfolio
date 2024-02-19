@@ -7,17 +7,17 @@ import {
   Collapse,
   CircularProgress,
 } from '@mui/material';
-import useStore from '../../app/store';
+import { authStore } from '../../app/store';
 import { useMutation } from 'react-query';
 import { API } from '../../API';
 import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
-  const { login } = useStore();
+  const {user,login } = authStore();
 
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
