@@ -11,7 +11,7 @@ router.post('/register', asyncHandler(registerUser));
 router.post('/login', asyncHandler(loginUser));
 
 // Account Activation Endpoint
-router.post('/activate', asyncHandler(activateAccount));
+router.get('/activate', asyncHandler(activateAccount));
 
 // Forgot Password Request Endpoint
 router.post('/forgot-password', asyncHandler(passwordReset));

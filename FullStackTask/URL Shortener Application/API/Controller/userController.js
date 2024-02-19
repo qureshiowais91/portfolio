@@ -84,7 +84,7 @@ async function passwordReset(req, res, next) {
 }
 
 async function activateAccount(req, res) {
-  const { activationToken } = req.body;
+  const { activationToken } = req.query;
 
   if (!activationToken) {
     throw new Errorhandler(USER_EVENTS.ACCOUNT_ACTIVATION_FAILED, "Activation Code Not Found", 404)
