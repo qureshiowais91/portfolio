@@ -50,7 +50,7 @@ const LayoutMenu = () => {
               <NavLink to='/'>Login</NavLink>
             </Button>
             <Button>
-              <NavLink to='/forgotpassword'>Forgot Password</NavLink>
+              <NavLink to='/resetPassword'>Forgot Password</NavLink>
             </Button>
             <Button>
               <NavLink to='/register'>Register</NavLink>

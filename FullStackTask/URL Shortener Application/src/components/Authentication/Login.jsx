@@ -21,7 +21,7 @@ export const Login = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: '',
   });
 
@@ -35,6 +35,7 @@ export const Login = () => {
 
   const loginMutation = useMutation(
     async (formData) => {
+      console.log(formData)
       setIsLoading(true); // Set loading state to true when mutation starts
       const response = await fetch(`${API.USER_URL}/login`, {
         method: 'POST',
@@ -94,9 +95,9 @@ export const Login = () => {
           <TextField
             label='Email'
             variant='outlined'
-            name='username'
+            name='email'
             type='email'
-            value={formData.username}
+            value={formData.email}
             onChange={handleInputChange}
             required
           />
