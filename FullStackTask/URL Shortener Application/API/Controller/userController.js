@@ -44,7 +44,7 @@ async function registerUser(req, res) {
 async function loginUser(req, res) {
   const { email, password } = req.body;
   console.log(email, password)
-  const userData = await User.find({email:email});
+  const userData = await User.find({ email: email });
   if (!(userData[0].activationToken === 'true')) {
     throw new Errorhandler(USER_EVENTS.LOGIN_ATTEMPT_FAILED, "Account Not Activated Check Your Inbox", 200)
   }
@@ -64,8 +64,57 @@ async function loginUser(req, res) {
   res.status(200).json({ message: 'User logged in successfully', userLoggedInEvent });
 }
 
+async function forgetPassoword(req, res, next) {
+  const { email } = req.body;
+
+  const isFound = await User.find({ email: email });
+
+  if (!isFound) {
+    throw new Errorhandler("ForgotPassword", "Email Not Found", 404);
+  }
+
+
+  const activationToken = generateRandomCode();
+
+
+  const userUpdated = await User.findOneAndUpdate({ email: email }, { activationToken: activationToken })
+
+  if (!userUpdated) {
+    throw new Errorhandler("ForgotPassword", "Server Error", 500);
+  }
+
+
+  res.status(201).json({ message: 'Link Sent Success Fully', userUpdated });
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.APP_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Reset Password',
+    html: `${activationToken}`,
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+}
+
 async function passwordReset(req, res, next) {
-  const { email, password } = req.body;
+  const { email, password, resetToken } = req.body;
+  console.log(resetToken)
+  const filterResetToken = { activationToken: resetToken };
+  const updateResetToken = { activationToken: true };
+
+  const userAccount = await User.findOneAndUpdate(filterResetToken, updateResetToken, { new: true });
+
+  if (!userAccount) {
+    throw new Errorhandler("ResetPassword", "Token MisMatched", 304);
+  }
 
   const salt = await bcy.genSalt(10);
   const encryptedPassword = await bcy.hash(password, salt);
@@ -80,7 +129,7 @@ async function passwordReset(req, res, next) {
     eventData: { userData }
   }
 
-  res.status(200).json({ message: 'Password Reset', PasswordResetEvent });
+  res.status(200).json({ message: 'Password Reset Successfully', PasswordResetEvent });
 }
 
 async function activateAccount(req, res) {
@@ -120,5 +169,6 @@ module.exports = {
   registerUser,
   activateAccount,
   passwordReset,
+  forgetPassoword,
   profile
 };

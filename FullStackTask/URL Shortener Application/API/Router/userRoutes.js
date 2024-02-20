@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { asyncHandler } = require("../util/asyncHandler");
-const { loginUser, registerUser, activateAccount, passwordReset, profile } = require('../Controller/userController');
+const { loginUser, registerUser, activateAccount, passwordReset,forgetPassoword, profile } = require('../Controller/userController');
 const { auth } = require("../Middleware/auth")
 
 // User Registration Endpoint
@@ -14,7 +14,9 @@ router.post('/login', asyncHandler(loginUser));
 router.get('/activate', asyncHandler(activateAccount));
 
 // Forgot Password Request Endpoint
-router.post('/forgot-password', asyncHandler(passwordReset));
+forgetPassoword
+router.post('/forgot-password', asyncHandler(forgetPassoword));
+router.post('/update-password', asyncHandler(passwordReset));
 
 router.get('/profile', auth, asyncHandler(profile));
 // Password Reset Endpoint
