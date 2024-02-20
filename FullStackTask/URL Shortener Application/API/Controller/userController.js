@@ -43,8 +43,8 @@ async function registerUser(req, res) {
 
 async function loginUser(req, res) {
   const { email, password } = req.body;
-
-  const userData = await User.find({ email });
+  console.log(email, password)
+  const userData = await User.find({email:email});
   if (!(userData[0].activationToken === 'true')) {
     throw new Errorhandler(USER_EVENTS.LOGIN_ATTEMPT_FAILED, "Account Not Activated Check Your Inbox", 200)
   }
@@ -55,7 +55,7 @@ async function loginUser(req, res) {
     throw new Errorhandler(USER_EVENTS.LOGIN_ATTEMPT_FAILED, "Email And Password Does Not Match", 200)
   }
   const token = generateAccessToken(userData[0]);
-  
+
   const userLoggedInEvent = {
     eventType: USER_EVENTS.USER_LOGGED_IN,
     eventData: token
@@ -97,7 +97,7 @@ async function activateAccount(req, res) {
 
   if (!userAccount) { throw new Errorhandler(USER_EVENTS.ACCOUNT_ACTIVATION_FAILED, "Account Not Found", 404) }
 
-  res.status(200).json({ message: 'User Account Activated', userAccount })
+  res.status(200).json({ message: 'User Account Activated' })
 }
 
 

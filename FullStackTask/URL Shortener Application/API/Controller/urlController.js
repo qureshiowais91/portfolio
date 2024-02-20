@@ -12,7 +12,7 @@ const { generateRandomCode } = require("../util/genrateRandome")
 
 async function createShortURL(req, res) {
     const { longURL } = req.body;
-    const userId = req.body.id;
+    const userId = req.user.id;
     // console.log(req)
 
     if (!longURL) {
@@ -104,7 +104,8 @@ async function clickCount(req, res, next) {
 
 
 async function getUrlList(req, res, next) {
-    const { id } = req.body;
+    const { id } = req.user;
+    console.log(id)
     const UrlList = await URL.find({ creator: id }).select('longURL shortURL clickCount');
     res.status(200).json({ message: 'Url List', UrlList });
 }

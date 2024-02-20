@@ -14,9 +14,10 @@ async function auth(req, res, next) {
     if (!decode) {
         throw new Errorhandler('Invalid Token', 304);
     }
-    console.log("dd",decode);
-    req.body.id = decode["id"];
-    console.log(req.body);
+    // console.log(decode)
+    req.user = decode
+    // console.log(req.id);
+
 
     next();
 }
