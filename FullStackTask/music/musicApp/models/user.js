@@ -15,8 +15,11 @@ const userSchema = new mongoose.Schema({
   },
   favoriteSongs: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Song', 
-  }]
+    ref: 'Song',
+  }],
+  isArtist: {
+    type: String
+  }
 });
 
 const User = mongoose.model('User', userSchema);
