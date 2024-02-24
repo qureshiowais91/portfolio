@@ -7,6 +7,7 @@ const genreSchema = new mongoose.Schema({
 
 const Genre = mongoose.model('Genre', genreSchema);
 
+
 const songSchema = new mongoose.Schema({
     title: { type: String, required: true },
     artist: { type: String, required: true },

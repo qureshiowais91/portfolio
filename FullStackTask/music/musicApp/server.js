@@ -8,6 +8,11 @@ const multer = require('multer');
 const cors = require('cors');  // Import the cors middleware
 require('dotenv').config();
 
+// API DOCs
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
+
 const app = express();
 
 app.use(cors())
@@ -26,6 +31,21 @@ app.use((req, res, next) => {
   next();
 });
 
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Music API',
+      version: '1.0.0',
+      description: 'Spotify Clone Music API',
+    },
+  },
+  apis: ['./routes/*.js'],
+};
+
+const swaggerSpec = swaggerJsdoc(options);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/auth', cors(), authRouter);
 app.use('/api/song', songRouter);
 app.use('/api/genres', genreRouter);
@@ -98,31 +118,6 @@ app.get('/stream/', (req, res) => {
 
   fileStream.pipe(res, { start, end: end + 1 });
 });
-
-
-// app.get('/stream/', (req, res) => {
-//   const filename = req.query.file;
-
-//   // Open a read stream for the file
-//   var fileStream
-//   if(gridfsBucket){
-//    fileStream = gridfsBucket.openDownloadStreamByName(filename);
-//   }
-
-//   // Set response headers
-//   res.set({
-//     'Content-Type': 'audio/mpeg',
-//     'Content-Disposition': 'inline; filename=' + filename,
-//     'Access-Control-Allow-Origin': '*', // Adjust the origin as needed
-//     'Access-Control-Allow-Methods': 'GET, OPTIONS', // Adjust the allowed methods
-//     'Access-Control-Allow-Headers': 'Range, Accept-Ranges, Content-Type',
-//     'Accept-Ranges': 'bytes',
-//   });
-
-//   // Pipe the file stream to the response
-//   fileStream.pipe(res);
-// });
-
 
 app.use(errorHandler);
 
