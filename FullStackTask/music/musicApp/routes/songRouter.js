@@ -1,10 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getAllSongs, getSongById, createSong } = require('../controllers/songController');
-const multer = require('multer'); 
-
-const storage = multer.memoryStorage(); // Store files in memory as/ Buffers
-// const upload = multer({ storage: storage });
+const { uploadToS3 } = require("../controllers/songController");
 
 /**
  * @swagger
@@ -53,59 +50,8 @@ router.get('/', getAllSongs);
  */
 router.get('/:id', getSongById);
 
-/**
- * @swagger
- * /api/songs:
- *   post:
- *     summary: Create a new song
- *     description: Create a new song with provided details.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/NewSong'
- *     responses:
- *       '201':
- *         description: Successfully created a new song.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Song'
- *       '400':
- *         description: Bad request, check request body.
- *       '500':
- *         description: Internal server error.
- /**
- * @swagger
- * components:
- *   schemas:
- *     Song:
- *       type: object
- *       properties:
- *         title:
- *           type: string
- *           description: Title of the song.
- *         artist:
- *           type: string
- *           description: Artist of the song.
- *         album:
- *           type: string
- *           description: Album of the song.
- *         genreId:
- *           type: string
- *           description: ID of the genre associated with the song.
- *           example: "60b9db346785b300152b4642"
- *         songFile:
- *           type: string
- *           format: binary
- *           description: Binary data representing the song file.
- *         releaseDate:
- *           type: string
- *           format: date-time
- *           description: Release date of the song.
- */
-router.post('/', createSong);
 
-// router.post('/upload',upload.single('file'),uploadSong);
+router.post('/uploadSongFile', uploadToS3);
+router.post('/uploadSongMetaData', createSong);
+
 module.exports = router;

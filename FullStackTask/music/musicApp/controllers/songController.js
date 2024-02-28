@@ -1,24 +1,70 @@
 // controllers/songController.js
-const { Song, Genre } = require('../models/song');
+const Genre = require('../models/genre');
+const Song = require('../models/song');
+
+const multer = require('multer');
+const AWS = require('aws-sdk');
+
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION,
+});
+
+const uploadToS3 = async (req, res, next) => {
+    const upload = multer({
+        storage: multer.memoryStorage(),
+        limits: { fileSize: 20 * 1024 * 1024 },
+    }).single('mp3');
+
+    upload(req, res, function (err) {
+        if (err) {
+            return res.status(400).json({ error: 'Error uploading file' });
+        }
+
+        const file = req.file;
+
+        if (!file) {
+            return res.status(400).json({ error: 'No file provided' });
+        }
+
+        const params = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: `mp3/${file.originalname}`, // Change the Key as needed
+            Body: file.buffer,
+            ContentType: file.mimetype,
+        };
+
+        s3.upload(params, (err, data) => {
+            if (err) {
+                console.error('Upload Error', err);
+                return res.status(500).json({ error: 'Error uploading file to S3' });
+            }
+
+            console.log('Upload Success', data.Location);
+            res.status(201).json({ location: data.Location }); // Attach the S3 file location to the request object
+        });
+    });
+};
 
 // Create a new song
 const createSong = async (req, res) => {
     try {
-        const { title, artist, album, genreId, songFile, releaseDate } = req.body;
+        const { title, artist, album, genreId, songURL, releaseDate } = req.body;
+        console.log(req.body);
+        const genre = await Genre.findById({ _id: genreId });
 
-        // Check if the genre exists
-        const genre = await Genre.findById(genreId);
         if (!genre) {
             return res.status(400).json({ message: 'Invalid genre ID.' });
         }
-
+      console.log(songURL)
         const newSong = new Song({
-            title,
-            artist,
-            album,
+            title: title,
+            artist: artist,
+            album: album,
             genre: genreId,
-            songFile: Buffer.from(songFile, 'base64'), // Assuming songFile is base64 encoded
-            releaseDate,
+            songURL: songURL,
+            releaseDate: releaseDate,
         });
 
         await newSong.save();
@@ -66,7 +112,7 @@ const updateSongById = async (req, res) => {
         const { title, artist, album, genreId, releaseDate } = req.body;
 
         // Check if the genre exists
-        const genre = await Genre.findById(genreId);
+        const genre = await Genre.findById(genreId['genreId']);
         if (!genre) {
             return res.status(400).json({ message: 'Invalid genre ID.' });
         }
@@ -113,9 +159,10 @@ const deleteSongById = async (req, res) => {
 };
 
 module.exports = {
-    createSong,
     getAllSongs,
     getSongById,
     updateSongById,
     deleteSongById,
+    createSong,
+    uploadToS3,
 };

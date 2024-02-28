@@ -36,9 +36,7 @@ const { getAllGenres, getGenreById, createGenre } = require('../controllers/genr
  *           description: Description of the genre.
  *           example: A genre characterized by guitar-based music with a strong backbeat.
  */
-
 router.get('/', getAllGenres);
-
 /**
  * @swagger
  * /api/genres/{id}:
@@ -65,7 +63,6 @@ router.get('/', getAllGenres);
  *         description: Internal server error.
  */
 router.get('/', getGenreById);
-
 /**
  * @swagger
  * /api/genres:
