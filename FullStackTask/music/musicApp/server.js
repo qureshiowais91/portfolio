@@ -57,7 +57,7 @@ const swaggerSpec = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/auth', cors(), authRouter);
 app.use('/api/song', songRouter);
-app.use('/api/genres', genreRouter);
+app.use('/api/genre', genreRouter);
 
 mongoose.connect(process.env.MONGODB_URI);
 
