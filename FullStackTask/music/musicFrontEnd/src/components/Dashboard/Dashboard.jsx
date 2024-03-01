@@ -1,38 +1,32 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Paper, Grid } from '@mui/material';
 import MusicPlayer from '../Player/Player';
 import SongList from '../SongList/SongList';
-import GenreTag from '../Genre/Genre';
+// import GenreTag from '../Genre/Genre';
 import Divider from '@mui/material/Divider';
+import { API } from '../../API/API';
 
 const Dashboard = () => {
   const [genress, setGenres] = useState();
 
-  const genres = [
-    { id: 1, name: 'Rock' },
-    { id: 2, name: 'Pop' },
-    { id: 3, name: 'Jazz' },
-    { id: 4, name: 'Hip Hop' },
-    { id: 5, name: 'Country' },
-    { id: 6, name: 'Electronic' },
-    { id: 7, name: 'Blues' },
-    { id: 8, name: 'Reggae' },
-    { id: 9, name: 'Classical' },
-    { id: 10, name: 'R&B' },
-    { id: 11, name: 'Funk' },
-    { id: 12, name: 'Indie' },
-    { id: 13, name: 'Metal' },
-    { id: 14, name: 'Alternative' },
-    { id: 15, name: 'Soul' },
-  ];
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(`${API.GET_ALL_GENRES}`, {
+        method: 'GET',
+      });
+
+      const Genre = await res.json();
+      console.log(Genre);
+      setGenres()
+      console.log(genress)
+    })();
+  }, []);
 
   return (
     <Container maxWidth='xl'>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          {genres.map((genre) => (
-            <GenreTag key={genre.id} genre={genre.name} />
-          ))}
+         
         </Grid>
         <Grid item xs={5}>
           <SongList></SongList>

@@ -1,10 +1,10 @@
-const { Genre } = require('../models/genre');
+const Genre = require('../models/genre');
 
 // Get all genres
 const getAllGenres = async (req, res) => {
     try {
         const genres = await Genre.find();
-        res.json(genres);
+        res.status(200).json({genres});
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -12,8 +12,10 @@ const getAllGenres = async (req, res) => {
 
 // Get a specific genre by ID
 const getGenreById = async (req, res) => {
-    try {
-        const genre = await Genre.findById(req.params.id);
+    try { 
+        const id = req.query.id;
+        console.log(id)
+        const genre = await Genre.findById({id});
         if (!genre) {
             return res.status(404).json({ message: 'Genre not found' });
         }

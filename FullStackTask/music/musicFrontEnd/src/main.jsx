@@ -1,5 +1,4 @@
 // index.js
-import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Login } from './components/Auth/Login/Login.jsx';
@@ -7,7 +6,6 @@ import { Register } from './components/Auth/Regsiter/Register.jsx'; // Correct t
 import { QueryClientProvider, QueryClient } from 'react-query';
 import { Provider } from 'react-redux';
 import LayoutMenu from './components/Layout.jsx';
-import MusicPlayer from './components/Player/Player.jsx';
 import { store } from './components/App/store.js';
 import Dashboard from './components/Dashboard/Dashboard.jsx';
 

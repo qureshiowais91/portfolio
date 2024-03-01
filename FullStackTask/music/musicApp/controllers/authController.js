@@ -5,18 +5,17 @@ const asyncHandler = require('../middleware/asyncHandler.js');
 const ErrorResponse = require("../utils/errorResponse.js");
 
 const registerUser = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
 
-  const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+  const existingUser = await User.findOne({ email });
 
   if (existingUser) {
-    return new ErrorResponse('User with this username or email already exists.', 400);
+    res.status(201).json({ message: 'User Alread Exist ', status: true })
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const newUser = new User({
-    username,
     email,
     password: hashedPassword,
   });
@@ -43,7 +42,7 @@ const loginUser = async (req, res) => {
 
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-  res.status(200).json({ token, email: user.email,isAuthenticated:true});
+  res.status(200).json({ token, email: user.email, isAuthenticated: true });
 };
 
 module.exports = {

@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
-import { Typography, TextField, Button, Stack } from '@mui/material';
-import { sendRequest } from '../../../../API/apihelper';
+import { useState } from 'react';
+import {
+  Typography,
+  TextField,
+  Button,
+  Stack,
+} from '@mui/material';
+// import { sendRequest } from '../../../API/API';
 
 export const Register = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
+    isArtist: '',
   });
 
   const handleInputChange = (e) => {
@@ -29,12 +35,12 @@ export const Register = () => {
       email: formData.email,
       password: formData.password,
     };
-
-    (async () => {
-      const res = await sendRequest('/api/auth/register', data, 'POST');
-      console.log(res);
-      // dispatch(setUser(res));
-    })();
+    console.log(data)
+    // (async () => {
+    //   const res = await fetch('/api/auth/register', data, 'POST');
+    //   console.log(res);
+    //   // dispatch(setUser(res));
+    // })();
   };
 
   return (

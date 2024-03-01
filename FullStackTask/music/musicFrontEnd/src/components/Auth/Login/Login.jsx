@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Typography,
   TextField,
@@ -7,18 +7,19 @@ import {
   Alert,
   Collapse,
 } from '@mui/material';
-import { setUser, logout } from '../../../features/auth/authSlice';
-import { sendRequest } from '../../../../API/apihelper';
+import { API } from '../../../API/API';
 import { useDispatch } from 'react-redux';
+import { setUser } from '../../../features/auth/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
 
   const dispatch = useDispatch();
-
   const [error, setError] = useState();
 
   const handleInputChange = (e) => {
@@ -43,17 +44,22 @@ export const Login = () => {
     };
 
     (async () => {
-      const res = await sendRequest('/api/auth/login', data, 'POST');
+      const res = await fetch(`${API.LOGIN_USER}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
       if (res?.error) {
         setError({ errorMsg: res.error, errorStatus: res.errorStatus });
       }
-      // console.log(res);
-      const user = {
-        token: res.token,
-        isAuthenticated: true,
-      };
-      console.log(user);
-      dispatch(setUser(user));
+
+      const userAccount = await res.json();
+      console.log(userAccount);
+      dispatch(setUser(userAccount));
+      navigate('/dashboard');
     })();
   };
 

@@ -20,49 +20,9 @@ const { getAllGenres, getGenreById, createGenre } = require('../controllers/genr
  *                 $ref: '#/components/schemas/Genre'
  *       '500':
  *         description: Internal server error.
-/**
- * @swagger
- * components:
- *   schemas:
- *     Genre:
- *       type: object
- *       properties:
- *         name:
- *           type: string
- *           description: Name of the genre.
- *           example: Rock
- *         description:
- *           type: string
- *           description: Description of the genre.
- *           example: A genre characterized by guitar-based music with a strong backbeat.
  */
 router.get('/', getAllGenres);
-/**
- * @swagger
- * /api/genres/{id}:
- *   get:
- *     summary: Get a specific genre by ID
- *     description: Retrieve details of a specific genre by its ID.
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: ID of the genre to retrieve.
- *         schema:
- *           type: string
- *     responses:
- *       '200':
- *         description: Details of the genre.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Genre'
- *       '404':
- *         description: Genre not found.
- *       '500':
- *         description: Internal server error.
- */
-router.get('/', getGenreById);
+
 /**
  * @swagger
  * /api/genres:

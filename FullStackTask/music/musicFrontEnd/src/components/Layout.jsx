@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   AppBar,
@@ -8,7 +7,6 @@ import {
   Toolbar,
   ThemeProvider,
   createTheme,
-  Container,
 } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
