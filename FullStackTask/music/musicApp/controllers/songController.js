@@ -42,7 +42,7 @@ const uploadToS3 = async (req, res, next) => {
             }
 
             console.log('Upload Success', data.Location);
-            res.status(201).json({ location: data.Location }); 
+            res.status(201).json({ location: data.Location });
         });
     });
 };
@@ -57,7 +57,7 @@ const createSong = async (req, res) => {
         if (!genre) {
             return res.status(400).json({ message: 'Invalid genre ID.' });
         }
-      console.log(songURL)
+        console.log(songURL)
         const newSong = new Song({
             title: title,
             artist: artist,
@@ -140,6 +140,27 @@ const updateSongById = async (req, res) => {
     }
 };
 
+// Get Song List By Genre ID List
+const getSongListByGenre = async (req, res) => {
+    try {
+        const { selectedGenreIds } = req.body;
+        if(selectedGenreIds){
+            console.log(selectedGenreIds)
+        }
+        const songList = await Song.find({ genre: { $in: selectedGenreIds } }).populate('genre');
+
+        if (!songList) {
+            return res.status(404).json({ message: 'Song not found.' });
+        }
+        
+        res.status(200).json(songList);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+
 // Delete a song by ID
 const deleteSongById = async (req, res) => {
     try {
@@ -165,4 +186,5 @@ module.exports = {
     deleteSongById,
     createSong,
     uploadToS3,
+    getSongListByGenre
 };

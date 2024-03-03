@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllSongs, getSongById, createSong } = require('../controllers/songController');
+const { getAllSongs, getSongById, createSong, getSongListByGenre } = require('../controllers/songController');
 const { uploadToS3 } = require("../controllers/songController");
 
 /**
@@ -154,5 +154,5 @@ router.post('/uploadSongFile', uploadToS3);
  *                   description: Description of the error.
  */
 router.post('/uploadSongMetaData', createSong);
-
+router.post('/listBygenre', getSongListByGenre);
 module.exports = router;
