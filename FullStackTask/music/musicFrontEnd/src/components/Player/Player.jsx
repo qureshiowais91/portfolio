@@ -1,112 +1,49 @@
-import  { useState, useEffect } from 'react';
-import {
-  Card,
-  CardContent,
-  IconButton,
-  Typography,
-  Slider,
-  Stack,
-} from '@mui/material';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-
+import { useEffect, useRef, useState } from 'react';
+import { Card, Box, Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
 const MusicPlayer = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [playedTime, setPlayedTime] = useState(0);
-  const [endTime, setEndTime] = useState(0);
+  const url = useSelector((state) => state.controller.url);
+  const name = useSelector((state) => state.controller.name);
+  const album = useSelector((state) => state.controller.album);
+  const audioRef = useRef(null);
 
-  // Simulating audio duration for demonstration purposes
-  const audioDuration = 240; // 4 minutes
-
-  useEffect(() => {
-    setEndTime(audioDuration);
-  }, []);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (isPlaying && progress < audioDuration) {
-        setProgress((prevProgress) => prevProgress + 1);
-        setPlayedTime((prevPlayedTime) => prevPlayedTime + 1);
+    audioRef.current.src = url;
+    audioRef.current.play();
+
+    const handleScroll = () => {
+      if (window.scrollBy > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
       }
-    }, 1000);
+    };
 
-    return () => clearInterval(interval);
-  }, [isPlaying, progress, audioDuration]);
+    window.addEventListener('scroll', handleScroll);
 
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleSkipNext = () => {
-    // Add logic to skip to the next track
-  };
-
-  const handleSkipPrevious = () => {
-    // Add logic to skip to the previous track
-  };
-
-  const handleSliderChange = (event, newValue) => {
-    setProgress(newValue);
-    setPlayedTime(newValue);
-    // Add logic to update audio playback progress
-  };
-
-  const formatTime = (timeInSeconds) => {
-    const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = Math.floor(timeInSeconds % 60);
-    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(
-      2,
-      '0'
-    )}`;
-  };
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [url]);
 
   return (
     <div className='music-player-container'>
-      <div className='overlay'>
-        {/* Your content with album name, song name, and image */}
-        <img
-          src='./test.jpeg'
-          alt='Album Cover'
-          width='150rem'
-          className='album-cover'
-        />
-        <Typography variant='h4' className='album-name'>
-          Album Name
-        </Typography>
-        <Typography variant='h2' className='song-name'>
-          Song Name
-        </Typography>
-      </div>
-
-      {/* Music player controls */}
-      <Card className='music-controls'>
-        <CardContent>
-          <Stack direction='row' spacing={3}>
-            <Typography variant='body2'>{formatTime(playedTime)}</Typography>
-            <Slider
-              value={progress}
-              onChange={handleSliderChange}
-              aria-labelledby='continuous-slider'
-              className='progress-slider'
-              max={audioDuration}
-            />
-            <Typography variant='body2'>{formatTime(endTime)}</Typography>
-          </Stack>
-          <div className='control-buttons'>
-            <IconButton onClick={handleSkipPrevious} disabled={!isPlaying}>
-              <SkipPreviousIcon />
-            </IconButton>
-            <IconButton onClick={handlePlayPause}>
-              {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-            </IconButton>
-            <IconButton onClick={handleSkipNext} disabled={!isPlaying}>
-              <SkipNextIcon />
-            </IconButton>
+      <Card className={`${isScrolled ? ' scrolled' : ''}`}>
+        <Box sx={{ alignContent: 'center' }}>
+          <div className='overlay'>
+            <Typography variant='h4' className='album-name'>
+              {album}
+            </Typography>
+            <Typography variant='h2' className='song-name'>
+              {name}
+            </Typography>
           </div>
-        </CardContent>
+          <audio controls ref={audioRef}>
+            <source src={url} type='audio/mpeg' />
+          </audio>
+        </Box>
       </Card>
     </div>
   );

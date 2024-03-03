@@ -42,7 +42,7 @@ const uploadToS3 = async (req, res, next) => {
             }
 
             console.log('Upload Success', data.Location);
-            res.status(201).json({ location: data.Location }); // Attach the S3 file location to the request object
+            res.status(201).json({ location: data.Location }); 
         });
     });
 };

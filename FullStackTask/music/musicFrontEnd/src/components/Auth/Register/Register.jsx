@@ -1,18 +1,12 @@
 import { useState } from 'react';
-import {
-  Typography,
-  TextField,
-  Button,
-  Stack,
-} from '@mui/material';
-// import { sendRequest } from '../../../API/API';
+import { Typography, TextField, Button, Stack } from '@mui/material';
+import { API } from '../../../API/API';
 
 export const Register = () => {
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: '',
-    isArtist: '',
+    confirmPassword: '',
   });
 
   const handleInputChange = (e) => {
@@ -25,22 +19,30 @@ export const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
     setFormData({
       email: '',
       password: '',
+      confirmPassword: '',
     });
 
     const data = {
       email: formData.email,
       password: formData.password,
+      confirmPassword: formData.confirmPassword,
     };
-    console.log(data)
-    // (async () => {
-    //   const res = await fetch('/api/auth/register', data, 'POST');
-    //   console.log(res);
-    //   // dispatch(setUser(res));
-    // })();
+    console.log(data);
+
+    (async () => {
+      const res = await fetch(`${API.REGISTER_USER}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      const register = await res.json()
+      console.log(register);
+    })();
   };
 
   return (
@@ -77,11 +79,11 @@ export const Register = () => {
             required
           />
           <TextField
-            label='Password'
+            label='Confirm Password'
             variant='outlined'
-            name='password'
+            name='confirmPassword'
             type='password'
-            value={formData.password}
+            value={formData.confirmPassword}
             onChange={handleInputChange}
             required
           />

@@ -1,73 +1,67 @@
-import React, { useState } from 'react';
-import { Card, CardContent, Grid, IconButton, Typography, Slider, Stack } from '@mui/material';
-
+import { useState, useEffect } from 'react';
+import { Grid, Typography, IconButton } from '@mui/material';
+import { ListItem, ListItemText } from '@mui/material';
+import { API } from '../../API/API';
+import { setSong } from '../../features/controller/controllerSlice';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow'; // Import the PlayArrowIcon from Material-UI
 const SongList = () => {
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
-
-  const songs = [
-    {
-      id: 1,
-      title: 'Song 1',
-      banner: './test.jpeg',
-    },
-    {
-      id: 2,
-      title: 'Song 2',
-      banner: './test.jpeg',
-    },
-    {
-      id: 3,
-      title: 'Song 3',
-      banner: './test.jpeg',
-    },
-    {
-      id: 3,
-      title: 'Song 3',
-      banner: './test.jpeg',
-    },
-    {
-      id: 3,
-      title: 'Song 3',
-      banner: './test.jpeg',
-    },  {
-      id: 3,
-      title: 'Song 3',
-      banner: './test.jpeg',
-    },  {
-      id: 3,
-      title: 'Song 3',
-      banner: './test.jpeg',
-    },
-    // Add more songs as needed
-  ];
+  const [songs, setSongList] = useState([]);
+  const dispatch = useDispatch();
+  const genreSelectedID = useSelector((state) => state.controller.genreID);
+  console.log(genreSelectedID);
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(`${API.GET_ALL_SONGS}`, {
+        method: 'GET',
+      });
+      const songres = await res.json();
+      setSongList(songres);
+    })();
+  }, []);
 
   const handlePlaySong = (song) => {
-    setCurrentlyPlaying(song);
-    // Add logic to play the selected song
+    dispatch(
+      setSong({ url: song.songURL, name: song.name, album: song.album })
+    );
+    setCurrentlyPlaying(song.songURL);
+    console.log(song);
   };
 
   return (
     <div>
       <Grid container spacing={3}>
         {songs.map((song) => (
-          <Grid item key={song.id} xs={3}>
-            <Card>
-              <img
-                src={song.banner}
-                alt={`Banner for ${song.title}`}
-                style={{ width: '100%', height: '150px', cursor: 'pointer' }}
-                onClick={() => handlePlaySong(song)}
-              />
-              <CardContent>
-                <Typography variant="h5" onClick={() => handlePlaySong(song)}>
-                  {song.title}
-                </Typography>
-                <Typography variant="body2">{`Song ID: ${song.id}`}</Typography>
-                {currentlyPlaying && currentlyPlaying.id === song.id && (
-                  <Typography variant="body2">Currently Playing</Typography>
-                )}
-              </CardContent>
-            </Card>
+          <Grid item key={song._id} xs={12} md={6} lg={4}>
+            <ListItem
+              sx={{
+                justifyContent: 'center',
+                textAlign: 'center',
+                borderRadius: '10%', // Make the button round
+              }}
+              onClick={() => handlePlaySong(song)}
+            >
+              {currentlyPlaying === song.songURL && (
+                <IconButton
+                  sx={{
+                    borderRadius: '50%', // Make the button round
+                    width: '50px', // Set a fixed width to ensure it's round
+                    height: '50px', // Set a fixed height to ensure it's round
+                    overflow: 'hidden', // Hide overflow to ensure it's round
+                  }}
+                >
+                  <PlayArrowIcon fontSize='large' />
+                </IconButton>
+              )}
+              <ListItemText>
+                <Typography>{song.title}</Typography>
+                <Typography>{song.album}</Typography>
+                <Typography>{song.artist}</Typography>
+                <Typography>{song.genre.name}</Typography>
+              </ListItemText>
+            </ListItem>
           </Grid>
         ))}
       </Grid>

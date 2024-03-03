@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Container, Paper, Grid } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 import MusicPlayer from '../Player/Player';
 import SongList from '../SongList/SongList';
-// import GenreTag from '../Genre/Genre';
-import Divider from '@mui/material/Divider';
+import GenreTag from '../Genre/Genre';
 import { API } from '../../API/API';
+import { useSelector } from 'react-redux';
 
 const Dashboard = () => {
-  const [genress, setGenres] = useState();
+  const [genress, setGenres] = useState([]);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  console.log(isAuthenticated);
+  const genreSelectedID = useSelector((state) => state.controller.genreID);
+
+  console.log(genreSelectedID);
 
   useEffect(() => {
     (async () => {
@@ -16,31 +21,34 @@ const Dashboard = () => {
       });
 
       const Genre = await res.json();
-      console.log(Genre);
-      setGenres()
-      console.log(genress)
+      setGenres(Genre['genres']);
     })();
   }, []);
 
   return (
-    <Container maxWidth='xl'>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-         
-        </Grid>
-        <Grid item xs={5}>
-          <SongList></SongList>
-        </Grid>
-        <Grid item xs={2}>
-          <Divider orientation='vertical' />
-        </Grid>
-        <Grid item xs={5}>
-          <Paper>
-            <MusicPlayer />
-          </Paper>
-        </Grid>
+   
+<Container>
+  <Grid container >
+    {/* Left section for genres */}
+    <Grid item xs={3}> {/* Adjust the width as needed */}
+      <Grid container direction="column" spacing={3}>
+        {genress.map((genre) => (
+          <Grid item key={genre._id}>
+            <GenreTag id={genre._id} name={genre.name} />
+          </Grid>
+        ))}
       </Grid>
-    </Container>
+    </Grid>
+    {/* Middle section for songs */}
+    <Grid item xs={9}> {/* Adjust the width as needed */}
+      <SongList />
+    </Grid>
+    {/* Bottom section for music player */}
+    <Grid item xs={10} sx={{ margin: '0 auto', position: 'fixed', bottom: 0, width: '80%' }}>
+      <MusicPlayer />
+    </Grid>
+  </Grid>
+</Container>
   );
 };
 

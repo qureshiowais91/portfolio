@@ -1,29 +1,35 @@
-// // GenreTag.js
-// import Button from '@mui/material/Button';
+/* eslint-disable react/prop-types */
+// GenreTag.js
+import Button from '@mui/material/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { setGenre } from '../../features/controller/controllerSlice';
+import RemoveCircleOutlineSharpIcon from '@mui/icons-material/RemoveCircleOutlineSharp';
+const GenreTag = ({ id, name }) => {
+  const dispatch = useDispatch();
+  const genreSelectedID = useSelector((state) => state.controller.genreID);
+  console.log(genreSelectedID);
+  // const buttonStyle = {
+  //   backgroundColor: 'transparent',
+  //   borderRadius: '20px', // Adjust the radius to your preference
+  //   color: '#000',
+  //   margin: '2rem',
+  // };
 
-// const GenreTag = ({ genre }) => {
-//   const buttonStyle = {
-//     backgroundColor: 'transparent',
-//     borderRadius: '20px', // Adjust the radius to your preference
-//     color: '#000',
-//     margin: '2rem',
-//   };
+  const handlerGenre = (e) => {
+    e.preventDefault();
+    dispatch(setGenre({ genreID: id }));
+  };
 
-//   const handlerGenre = (e) => {
-//     e.preventDefault();
-//     console.log(e.target.value);
-//   };
+  return (
+    <div>
+      <Button value={id} onClick={handlerGenre}>
+        {name}
+      </Button>
+      <Button>
+        <RemoveCircleOutlineSharpIcon />
+      </Button>
+    </div>
+  );
+};
 
-//   return (
-//     <Button
-//       value={genre}
-//       onClick={handlerGenre}
-//       variant='contained'
-//       style={buttonStyle}
-//     >
-//       {genre}
-//     </Button>
-//   );
-// };
-
-// export default GenreTag;
+export default GenreTag;
