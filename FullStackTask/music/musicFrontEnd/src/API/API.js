@@ -4,9 +4,10 @@ export const API = {
   GET_ALL_GENRES: 'https://musicplayerapi.onrender.com/api/genre/',
   CREATE_GENRE: 'https://musicplayerapi.onrender.com/api/genres',
   GET_ALL_SONGS: 'https://musicplayerapi.onrender.com/api/song',
+  GET_SONG_BY_GENRE: 'https://musicplayerapi.onrender.com/api/song/listBygenre',
   GET_SONG_BY_ID: 'https://musicplayerapi.onrender.com/api/song/{id}',
   UPLOAD_SONG_FILE: 'https://musicplayerapi.onrender.com/api/song/uploadSongFile',
-  UPLOAD_SONG_METADATA: 'https://musicplayerapi.onrender.com/api/song/uploadSongMetaData',
+  UPLOAD_SONG_METADATA: 'https://musicplayerapi.onrender.com/api/song/uploadSongMetaData'
 };
 
 

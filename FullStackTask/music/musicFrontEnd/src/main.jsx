@@ -17,14 +17,20 @@ import './App.css';
 import './index.css';
 import React from 'react';
 
+// import { Elements } from '@stripe/react-stripe-js';
+// import { loadStripe } from '@stripe/stripe-js';
+
+// const stripePromise = loadStripe(
+//   'pk_test_51HrOiRCX6BmtIJZGzNTsZTgaAfiweCt0DaiFJZtsxtQQgXMUCLWDEuWvfpdptlZc00VYK8pSHjafNf0oBzOCYoUI00UZ93Y3lE'
+// );
 const router = createBrowserRouter(
   createRoutesFromElements(
     <React.Fragment>
       <Route path='/'>
-      <Route element={<LayoutMenu/>}>
-        <Route path='/register' element={<Register />} />
+        <Route element={<LayoutMenu />}>
+          <Route path='/register' element={<Register />} />
           <Route path='/' element={<Login />} />
-        </Route>           
+        </Route>
       </Route>
       <Route element={<Auth />}>
         <Route path='/dashboard' element={<Dashboard />} />

@@ -5,22 +5,35 @@ import { API } from '../../API/API';
 import { setSong } from '../../features/controller/controllerSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow'; // Import the PlayArrowIcon from Material-UI
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+
 const SongList = () => {
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
   const [songs, setSongList] = useState([]);
   const dispatch = useDispatch();
-  const genreSelectedID = useSelector((state) => state.controller.genreID);
-  console.log(genreSelectedID);
+  const selectedGenreIds = useSelector((state) => state.controller.genreID);
+
   useEffect(() => {
     (async () => {
-      const res = await fetch(`${API.GET_ALL_SONGS}`, {
-        method: 'GET',
-      });
-      const songres = await res.json();
-      setSongList(songres);
+      if (!selectedGenreIds) {
+        const res = await fetch(`${API.GET_ALL_SONGS}`, {
+          method: 'GET',
+        });
+        const songres = await res.json();
+        setSongList(songres);
+      } else {
+        const res = await fetch(API.GET_SONG_BY_GENRE, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json', // Correct content type header
+          },
+          body: JSON.stringify({selectedGenreIds:selectedGenreIds}),
+        });
+        const songres = await res.json();
+        setSongList(songres);
+      }
     })();
-  }, []);
+  }, [selectedGenreIds]);
 
   const handlePlaySong = (song) => {
     dispatch(

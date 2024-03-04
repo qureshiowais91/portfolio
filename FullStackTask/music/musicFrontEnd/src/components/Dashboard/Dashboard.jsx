@@ -10,9 +10,7 @@ const Dashboard = () => {
   const [genress, setGenres] = useState([]);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   console.log(isAuthenticated);
-  const genreSelectedID = useSelector((state) => state.controller.genreID);
 
-  console.log(genreSelectedID);
 
   useEffect(() => {
     (async () => {

@@ -8,7 +8,6 @@ function Auth() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      console.log('test');
       navigate('/');
     }
   }, [isAuthenticated]);
